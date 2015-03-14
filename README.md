@@ -151,6 +151,12 @@ Optional keywords are
  .InTo("tablename") // Use in a insert, udate if the class does not map to the tablename
  .Skip(10) // Use this to skip the first 10 records
  .Take(10) // use this to take only 10 records
+ //Tracking objects to get cell not row insert update 
+ .Track(item).ForInsert().SaveChanges();
+ .Track(item).ForUpdate().SaveChanges();
+ //
+ .WithKey(m=> m.CountryId) // use this to set the PrimaryKey
+ .WithKeys(new[] { "CountryId" })
  
 ```
 
