@@ -1,0 +1,7 @@
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Release\Trinity.dll.config
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Release\Trinity.dll
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Release\Trinity.pdb
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Release\MySql.Data.dll
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\obj\Release\OfficeSoft.Data.Crud.csprojResolveAssemblyReference.cache
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\obj\Release\Trinity.dll
+C:\Projects\OSOFT\OfficeSoft.Data.Crud\obj\Release\Trinity.pdb
