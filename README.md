@@ -20,7 +20,7 @@ The ORM can handle SQL server, OleDb (access) and MySql...
 
 ### SqlServer
 
-1. Create a database "trinitytest"
+Create a database "trinitytest"
 ```bash
 USE [TrinityTest]
 GO
@@ -44,12 +44,12 @@ CREATE TABLE [dbo].[Country](
 GO
 ```
 
-2. Create a unit test project
-3. Add nuget package
+Create a unit test project
+Add nuget package
 ```bash  
 NuGet: PM> Install-Package Trinityorm 
 ```
-4. copy code to testclass
+Copy the code to testclass
 ```bash  
    public class Country
     {
