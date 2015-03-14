@@ -12,7 +12,13 @@ https://www.nuget.org/packages/Trinityorm/
 
 ## Features
 
-The ORM can handle SQL server, OleDb (access) and MySql...
+- The ORM can handle SQL server, OleDb (access) and MySql...
+- Convention over configuration
+- Custom configuration and mapping for querymodel, viewmodel insert and update
+- Easy extendend via interfaces
+- Track changes cell insert, update
+- Fast
+- .....
 
 ## Docs & Community
 
