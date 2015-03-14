@@ -15,6 +15,7 @@ https://www.nuget.org/packages/Trinityorm/
 - The ORM can handle SQL server, OleDb (access) and MySql...
 - Convention over configuration
 - Fluent api Linq
+- Db like statements
 - Custom configuration and mapping for querymodel, viewmodel insert and update
 - Easy extendend via interfaces
 - Track changes cell insert, update
