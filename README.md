@@ -24,6 +24,9 @@ https://www.nuget.org/packages/Trinityorm/
 
 ## Docs & Community
 
+* [Website and Documentation](http://devthings.net/?p=31)
+
+
 ## Quick Start
 
 ### SqlServer
