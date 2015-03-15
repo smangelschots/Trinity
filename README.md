@@ -148,7 +148,7 @@ Copy the code to testclass
         }
 ```
 
-Optional keywords are
+Optional keywords:
 ```bash  
  .From("tablename") // Use in a select if the class does not map the tablename
  .InTo("tablename") // Use in a insert, udate if the class does not map to the tablename
