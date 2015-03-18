@@ -81,6 +81,8 @@
 
         IDataCommand<T> Skip(int rows);
 
+        IDataCommand<T> Top(int items);
+
         IDataCommand<T> InTo(string tableName);
 
         IDataCommand<T> ForInsert();

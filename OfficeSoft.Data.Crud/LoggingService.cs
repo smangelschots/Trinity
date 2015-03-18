@@ -20,7 +20,6 @@ namespace OfficeSoft.Data.Crud
             try
             {
 
-                //TODO wijzigen dit moet herschreven worden
                 if (string.IsNullOrEmpty(ConnectionString))
                 {
                     System.IO.File.WriteAllText(@"Error.txt", "No ConnectionString was set for the LoggingService");

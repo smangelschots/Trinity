@@ -41,7 +41,6 @@ namespace OfficeSoft.Data.Crud
                 handler(this, e);
             }
         }
-
         public ResultList SaveChanges()
         {
             return Manager.SaveChanges();
@@ -827,6 +826,9 @@ namespace OfficeSoft.Data.Crud
             return this;
         }
 
+
+
+
         public IDataCommand<T> Where<TField>(Expression<Func<T, TField>> field, string opperator, object value)
         {
             string property = GetField(field);
@@ -838,6 +840,7 @@ namespace OfficeSoft.Data.Crud
 
             return Where(property, opperator, value);
         }
+
 
         public virtual IDataCommand<T> Where(string column, string opperator, object value)
         {
