@@ -154,6 +154,7 @@ Optional keywords:
  .InTo("tablename") // Use in a insert, udate if the class does not map to the tablename
  .Skip(10) // Use this to skip the first 10 records
  .Take(10) // use this to take only 10 records
+ .Top(1) //use this to get the top records
  //Tracking objects to get cell not row insert update 
  .Track(item).ForInsert().SaveChanges();
  .Track(item).ForUpdate().SaveChanges();
