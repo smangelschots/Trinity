@@ -1,4 +1,0 @@
-OfficeSoft.Data.Crud
-====================
-
-ORM

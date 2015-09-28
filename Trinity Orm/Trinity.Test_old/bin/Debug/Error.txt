@@ -1,0 +1,1 @@
+No ConnectionString was set for the LoggingService

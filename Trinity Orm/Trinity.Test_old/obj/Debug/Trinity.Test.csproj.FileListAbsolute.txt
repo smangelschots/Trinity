@@ -1,0 +1,2 @@
+C:\Projects\Trinity\Trinity.Test\obj\Debug\OfficeSoft.Data.Crud.Test.dll
+C:\Projects\Trinity\Trinity.Test\obj\Debug\OfficeSoft.Data.Crud.Test.pdb

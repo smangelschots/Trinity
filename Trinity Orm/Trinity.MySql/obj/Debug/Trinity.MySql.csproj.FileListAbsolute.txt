@@ -1,0 +1,9 @@
+C:\Projects\Trinity\Trinity.MySql\obj\Debug\Trinity.MySql.csprojResolveAssemblyReference.cache
+C:\Projects\Trinity\Trinity.MySql\bin\Debug\Trinity.MySql.dll.config
+C:\Projects\Trinity\Trinity.MySql\bin\Debug\Trinity.MySql.dll
+C:\Projects\Trinity\Trinity.MySql\bin\Debug\Trinity.MySql.pdb
+C:\Projects\Trinity\Trinity.MySql\bin\Debug\MySql.Data.dll
+C:\Projects\Trinity\Trinity.MySql\bin\Debug\Trinity.dll
+C:\Projects\Trinity\Trinity.MySql\bin\Debug\Trinity.pdb
+C:\Projects\Trinity\Trinity.MySql\obj\Debug\Trinity.MySql.dll
+C:\Projects\Trinity\Trinity.MySql\obj\Debug\Trinity.MySql.pdb

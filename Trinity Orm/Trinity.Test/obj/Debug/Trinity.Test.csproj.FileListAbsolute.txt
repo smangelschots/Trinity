@@ -1,0 +1,14 @@
+C:\Projects\Trinity\Trinity.Test\obj\Debug\Trinity.Test.csprojResolveAssemblyReference.cache
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.Test.dll.config
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.Test.dll
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.Test.pdb
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Projects\Trinity\Trinity.Test\bin\Debug\MySql.Data.dll
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.dll
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.MsSql.dll
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.MySql.dll
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.MsSql.pdb
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.MySql.pdb
+C:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.pdb
+C:\Projects\Trinity\Trinity.Test\obj\Debug\Trinity.Test.dll
+C:\Projects\Trinity\Trinity.Test\obj\Debug\Trinity.Test.pdb

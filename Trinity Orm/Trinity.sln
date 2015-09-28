@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity", "Trinity\Trinity.csproj", "{497707AB-7C6F-4CE5-A036-12F51EC67ECA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.MySql", "Trinity.MySql\Trinity.MySql.csproj", "{C8B46656-4068-4962-8E9D-6D5A75046C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.MsSql", "Trinity.MsSql\Trinity.MsSql.csproj", "{770350A3-52C8-4307-9FEB-5453AEED7BAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Ole", "Trinity.Ole\Trinity.Ole.csproj", "{9155B549-D27B-460C-8A8C-76671BDFD873}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{331A8423-422C-4A16-BA9E-19160E6A43D8}"
+	ProjectSection(SolutionItems) = preProject
+		Loggin.txt = Loggin.txt
+		README.TXT = README.TXT
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Test", "Trinity.Test\Trinity.Test.csproj", "{D4F2E8F9-98EB-4822-91CC-C0F041A75BA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{497707AB-7C6F-4CE5-A036-12F51EC67ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497707AB-7C6F-4CE5-A036-12F51EC67ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497707AB-7C6F-4CE5-A036-12F51EC67ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497707AB-7C6F-4CE5-A036-12F51EC67ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8B46656-4068-4962-8E9D-6D5A75046C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8B46656-4068-4962-8E9D-6D5A75046C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8B46656-4068-4962-8E9D-6D5A75046C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8B46656-4068-4962-8E9D-6D5A75046C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{770350A3-52C8-4307-9FEB-5453AEED7BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{770350A3-52C8-4307-9FEB-5453AEED7BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{770350A3-52C8-4307-9FEB-5453AEED7BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{770350A3-52C8-4307-9FEB-5453AEED7BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9155B549-D27B-460C-8A8C-76671BDFD873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9155B549-D27B-460C-8A8C-76671BDFD873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9155B549-D27B-460C-8A8C-76671BDFD873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9155B549-D27B-460C-8A8C-76671BDFD873}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F2E8F9-98EB-4822-91CC-C0F041A75BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F2E8F9-98EB-4822-91CC-C0F041A75BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F2E8F9-98EB-4822-91CC-C0F041A75BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F2E8F9-98EB-4822-91CC-C0F041A75BA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

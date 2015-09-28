@@ -1,0 +1,5 @@
+C:\Projects\Trinity\Trinity\bin\Debug\Trinity.dll
+C:\Projects\Trinity\Trinity\bin\Debug\Trinity.pdb
+C:\Projects\Trinity\Trinity\obj\Debug\Trinity.dll
+C:\Projects\Trinity\Trinity\obj\Debug\Trinity.pdb
+C:\Projects\Trinity\Trinity\obj\Debug\Trinity.csprojResolveAssemblyReference.cache

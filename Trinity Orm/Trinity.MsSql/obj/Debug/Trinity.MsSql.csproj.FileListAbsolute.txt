@@ -1,0 +1,7 @@
+C:\Projects\Trinity\Trinity.MsSql\obj\Debug\Trinity.MsSql.csprojResolveAssemblyReference.cache
+C:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.MsSql.dll
+C:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.MsSql.pdb
+C:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.dll
+C:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.pdb
+C:\Projects\Trinity\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
+C:\Projects\Trinity\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb
