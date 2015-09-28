@@ -1,5 +1,5 @@
 # Trinity ORM
-Start V1 alfa
+Start V1 beta
 
 
 Trinity is a flexible data access tool.
