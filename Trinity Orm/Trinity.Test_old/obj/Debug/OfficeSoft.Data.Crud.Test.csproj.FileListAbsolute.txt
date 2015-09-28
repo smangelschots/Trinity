@@ -1,9 +1,0 @@
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\bin\Debug\OfficeSoft.Data.Crud.Test.dll.config
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\bin\Debug\OfficeSoft.Data.Crud.Test.dll
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\bin\Debug\OfficeSoft.Data.Crud.Test.pdb
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\bin\Debug\MySql.Data.dll
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\obj\Debug\OfficeSoft.Data.Crud.Test.csprojResolveAssemblyReference.cache
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\obj\Debug\OfficeSoft.Data.Crud.Test.dll
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\obj\Debug\OfficeSoft.Data.Crud.Test.pdb
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\bin\Debug\Trinity.dll
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\bin\Debug\Trinity.pdb

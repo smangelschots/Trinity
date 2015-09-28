@@ -1,1 +1,0 @@
-C:\Projects\OSOFT\OfficeSoft.Data.Crud.Test\obj\Release\OfficeSoft.Data.Crud.Test.csprojResolveAssemblyReference.cache

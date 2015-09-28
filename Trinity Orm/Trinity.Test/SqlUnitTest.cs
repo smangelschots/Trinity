@@ -19,7 +19,7 @@ namespace Trinity.Test
     {
 
         private static string username = "admin";
-        private static string password = "Service01";
+        private static string password = "";
 
 
         private string _connectionstring =
