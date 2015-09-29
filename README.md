@@ -11,7 +11,7 @@ Trinity is a flexible data access tool.
 - https://www.nuget.org/packages/Trinity.Base/ for the base class
 - https://www.nuget.org/packages/Trinity.MsSql/ for MsSql server
 
-Stil under alpha testing
+Still under alpha testing
 - https://www.nuget.org/packages/Trinity.MySql/ for MySql server
 - https://www.nuget.org/packages/Trinity.Ole/ for Ms Access 
 
