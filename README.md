@@ -158,7 +158,7 @@ Copy the code to testclass
 Optional keywords:
 ```bash  
  .From("tablename") // Use in a select if the class does not map the tablename
- .InTo("tablename") // Use in a insert, udate if the class does not map to the tablename
+ .InTo("tablename") // Use in a insert, update if the class does not map to the tablename
  .Skip(10) // Use this to skip the first 10 records
  .Take(10) // use this to take only 10 records
  .Top(1) //use this to get the top records
