@@ -6,5 +6,7 @@ namespace Trinity
         public string RegExpression { get; set; }
         public bool IsRequired { get; set; }
         public string Message { get; set; }
+
+        
     }
 }

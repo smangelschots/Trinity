@@ -4,15 +4,18 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Trinity
 {
+
+
     public abstract class BaseDataManager<T> : IDataManager<T> where T : IDataCommand
     {
         private readonly DbProviderFactory _factory;
-    
+
         public event EventHandler<ModelCommandPropertyChangedEventArgs> Validating;
-     
+
         public bool TableMapFromDatabase { get; set; }
 
         public Dictionary<string, TableMap> TableMaps { get; set; }
@@ -43,7 +46,7 @@ namespace Trinity
             System.Diagnostics.Debug.WriteLine(x.ToString());
         }
 
-        protected BaseDataManager(string connectionString, string providerName): this()
+        protected BaseDataManager(string connectionString, string providerName) : this()
         {
             this.ConnectionString = connectionString;
             this._factory = DbProviderFactories.GetFactory(providerName);
@@ -125,19 +128,34 @@ namespace Trinity
 
         public IDataCommand GetCommand(int index)
         {
-            return (T)this.Commands[index];
+
+            if (Commands.Count > 0)
+                if (this.Commands.Count >= index)
+                    return (T)this.Commands[index];
+
+            return null;
         }
 
         //TODO rename to removeCommand
         public void Remove(int index)
         {
-             this.Commands.RemoveAt(index);
+            if (this.Commands.Count() >= index)
+            {
+                this.Commands.RemoveAt(index);
+            }
+
         }
         public void ClearCommands()
         {
             this.Commands.Clear();
-            
+
         }
+
+        public IEnumerable<IDataCommand> GetCommands()
+        {
+            return this.Commands;
+        }
+
         //TODO rename to removeCommand
         public void Remove(IDataCommand command)
         {
@@ -176,7 +194,7 @@ namespace Trinity
         {
             return string.Empty;
         }
-        
+
         public virtual ResultList SaveChanges()
         {
             var results = new ResultList();
@@ -184,6 +202,8 @@ namespace Trinity
             results.AddRange(this.UpdateCommands());
             results.AddRange(this.InsertCommands());
             results.AddRange(this.SelectCommands());
+
+
             return results;
         }
 
@@ -191,6 +211,12 @@ namespace Trinity
         protected abstract ICommandResult ExecuteUpdateCommand(T dataCommand, IDbCommand command);
         protected abstract ICommandResult ExecuteInsertCommand(T dataCommand, IDbCommand command);
         protected abstract ICommandResult ExecuteSelectCommand(T dataCommand, IDbCommand command);
+
+        protected abstract Task<ICommandResult> ExecuteDeleteCommandAsync(T dataCommand, IDbCommand command);
+        protected abstract Task<ICommandResult> ExecuteUpdateCommandAsync(T dataCommand, IDbCommand command);
+        protected abstract Task<ICommandResult> ExecuteInsertCommandAsync(T dataCommand, IDbCommand command);
+        protected abstract Task<ICommandResult> ExecuteSelectCommandAsync(T dataCommand, IDbCommand command);
+
 
         private void OnBeforeDelete(IDataCommand[] deleteCommands)
         {
@@ -258,10 +284,9 @@ namespace Trinity
         {
 
             var results = new List<ICommandResult>();
-
+            if (!commandsList.Any()) return results;
             try
             {
-                if (!commandsList.Any()) return results;
                 this.OpenSharedConnection();
                 // this.CreateTransaction();
                 results.AddRange(commandsList.Select(this.ExecuteCommand));
@@ -289,12 +314,68 @@ namespace Trinity
             return results;
         }
 
+
+        public async Task<ICommandResult> ExecuteCommandAsync(IDataCommand dataCommand)
+        {
+            var result = new CommandResult();
+
+            try
+            {
+                if (dataCommand.Validate() == false) return null;
+                this.OpenSharedConnection();
+                try
+                {
+                    using (var command = this.Connection.CreateCommand())
+                    {
+                        command.Connection = this.Connection;
+                        if (this.Transaction != null) command.Transaction = this.Transaction;
+                        switch (dataCommand.CommandType)
+                        {
+                            case DataCommandType.Select:
+                                return await this.ExecuteSelectCommandAsync((T)dataCommand, command);
+                            case DataCommandType.Insert:
+                                return await ExecuteInsertCommandAsync((T)dataCommand, command);
+                            case DataCommandType.Update:
+                                return await ExecuteUpdateCommandAsync((T)dataCommand, command);
+                            case DataCommandType.Delete:
+                                return await ExecuteDeleteCommandAsync((T)dataCommand, command);
+                        }
+                    }
+                }
+                catch (SqlException exception)
+                {
+                    result.AddError(ErrorType.Error, "Sql exeption", exception);
+                }
+                catch (Exception ex)
+                {
+                    result.AddError(ErrorType.Error, "exeption", ex);
+                }
+            }
+            catch (Exception ex1)
+            {
+                this.Errors.Add(new DataError
+                {
+                    StackTrace = ex1.StackTrace,
+                    Exception = ex1,
+                    HasError = true
+                });
+            }
+            finally
+            {
+                if (this.Transaction == null)
+                    this.Connection.Close();
+            }
+
+            return result;
+        }
+
+
         public T Select()
         {
             var dataCommand = AddNew();
             dataCommand.SelectAll = true;
             dataCommand.CommandType = DataCommandType.Select;
-           
+
             return dataCommand;
         }
         public T Delete()
@@ -322,6 +403,5 @@ namespace Trinity
                 return;
             this._connection.Dispose();
         }
-
     }
 }

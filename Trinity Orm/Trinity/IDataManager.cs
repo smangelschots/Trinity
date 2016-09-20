@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Trinity
 {
@@ -32,6 +33,8 @@ namespace Trinity
 
         void Remove(IDataCommand command);
         ICommandResult ExecuteCommand(IDataCommand dataCommand);
+
+        Task<ICommandResult> ExecuteCommandAsync(IDataCommand dataCommand);
     }
 
 }

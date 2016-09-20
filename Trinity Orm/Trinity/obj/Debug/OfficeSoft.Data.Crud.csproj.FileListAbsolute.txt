@@ -1,6 +1,0 @@
-C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Debug\Trinity.dll.config
-C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Debug\Trinity.dll
-C:\Projects\OSOFT\OfficeSoft.Data.Crud\bin\Debug\Trinity.pdb
-C:\Projects\OSOFT\OfficeSoft.Data.Crud\obj\Debug\Trinity.dll
-C:\Projects\OSOFT\OfficeSoft.Data.Crud\obj\Debug\Trinity.pdb
-C:\Projects\OSOFT\OfficeSoft.Data.Crud\obj\Debug\OfficeSoft.Data.Crud.csprojResolveAssemblyReference.cache

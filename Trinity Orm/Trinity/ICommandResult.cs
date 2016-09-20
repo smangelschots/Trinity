@@ -14,5 +14,7 @@ namespace Trinity
         void AddError(ErrorType errorType, string message, Exception exception = null);
         List<string> Messages { get; set; }
         void AddMessage(string message);
+
+
     }
 }

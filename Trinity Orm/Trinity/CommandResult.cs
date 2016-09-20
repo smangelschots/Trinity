@@ -24,7 +24,7 @@ namespace Trinity
         static MethodInfo fnGetValue = typeof(IDataRecord).GetMethod("GetValue", new Type[] { typeof(int) });
         static MethodInfo fnInvoke = typeof(Func<object, object>).GetMethod("Invoke");
         public Dictionary<string, DataColumn> Columns { get; private set; }
-        Dictionary<string, Delegate> PocoFactories = new Dictionary<string, Delegate>();
+
         public bool ForceDateTimesToUtc { get; set; }
         public TableInfo TableInfo { get; private set; }
         public string[] QueryColumns { get; private set; }
@@ -50,7 +50,7 @@ namespace Trinity
             if (exception != null)
                 sEvent += exception.Message + " " + exception.StackTrace;
 
-            LoggingService.SetMessage(sLog, sEvent, errorType);
+            LoggingService.SendToLog(sLog, sEvent, errorType);
 
 
         }
@@ -58,7 +58,7 @@ namespace Trinity
         public void AddMessage(string message)
         {
             this.Messages.Add(message);
-            LoggingService.SetMessage("SQLdatamanager", message, ErrorType.Information);
+            LoggingService.SendToLog("SQLdatamanager", message, ErrorType.Information);
         }
 
         public string Name { get; set; }
@@ -466,8 +466,8 @@ namespace Trinity
 
                 // Cache it, return it
                 var del = m.CreateDelegate(Expression.GetFuncType(typeof(IDataReader), this.type));
-                if (this.PocoFactories.ContainsKey(key) == false)
-                    this.PocoFactories.Add(key, del);
+                //if (this.PocoFactories.ContainsKey(key) == false)
+                //    this.PocoFactories.Add(key, del);
                 return del;
             }
             finally

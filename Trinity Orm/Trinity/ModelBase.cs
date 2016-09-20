@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 
 namespace Trinity
 {
@@ -47,7 +48,6 @@ namespace Trinity
         {
             get
             {
-
                 if (this.Errors.ContainsKey(columnName))
                     return this.Errors[columnName];
                 return string.Empty;
@@ -133,8 +133,12 @@ namespace Trinity
 
         public void RejectChanges()
         {
+            throw new NotImplementedException("Implement ChangeTracking");
             //TODO Implement ChangeTracking
         }
+
+        public abstract List<string> GetProperties();
+
 
         [Bindable(false)]
         [Browsable(false)]

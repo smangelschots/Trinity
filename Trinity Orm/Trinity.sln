@@ -1,7 +1,7 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity", "Trinity\Trinity.csproj", "{497707AB-7C6F-4CE5-A036-12F51EC67ECA}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Ole", "Trinity.Ole\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{331A8423-422C-4A16-BA9E-19160E6A43D8}"
 	ProjectSection(SolutionItems) = preProject
-		Loggin.txt = Loggin.txt
+		Logging.txt = Logging.txt
 		README.TXT = README.TXT
 	EndProjectSection
 EndProject

@@ -106,8 +106,11 @@ namespace Trinity
             this.DataManager = dataManager;
         }
 
+
         protected override void OnListChanged(ListChangedEventArgs e)
         {
+
+            if(e.NewIndex < 0) return;
             if (_cancelEvents == true)
                 return;
 
@@ -215,10 +218,6 @@ namespace Trinity
         protected override void OnAddingNew(AddingNewEventArgs e)
         {
             base.OnAddingNew(e);
-
-
-          
-
             this.newItemAdded = true;
         }
 
@@ -234,6 +233,7 @@ namespace Trinity
 
         public void AddRange(IList<T> list)
         {
+            this.DataManager.ClearCommands();
             foreach (var item in list)
             {
                 this.DataManager.Track(item)
@@ -252,16 +252,10 @@ namespace Trinity
         /// DO NOT USE FOR INSERT IF YOU DONT HAVE A ID
         /// </summary>
         /// <param name="model"></param>
+        /// 
         public new void Add(T model)
         {
-            this.DataManager
-              .Track(model)
-              .ForUpdate()
-              .WithKeys(this.PrimaryKeys)
-              .From(this.TableName);
-            newItemAdded = false;
-            base.Add(model);
-            OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
+           AddForUpdate(model);
         }
 
 
@@ -289,7 +283,7 @@ namespace Trinity
             OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
         }
 
-        public new void AddForInsert(T model, bool triggerEvents = true)
+        public void AddForInsert(T model, bool triggerEvents = true)
         {
             this.DataManager
               .Track(model)
@@ -303,12 +297,26 @@ namespace Trinity
             OnAfterModelAddedForInsert(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
         }
 
-        public virtual void SaveChanges()
+        public void AddForUpdate(T model)
+        {
+            this.DataManager
+            .Track(model)
+            .ForUpdate()
+            .WithKeys(this.PrimaryKeys)
+            .From(this.TableName);
+            newItemAdded = false;
+            base.Add(model);
+            OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
+        }
+
+        public virtual ResultList SaveChanges()
         {
             OnBeforeSave();
             var result = new AfterSaveEventArgs();
-            result.Results = this.DataManager.SaveChanges();
+            var resultList= this.DataManager.SaveChanges();
+            result.Results = resultList;
             OnAfterSave(result);
+            return resultList;
         }
 
         /// <summary>

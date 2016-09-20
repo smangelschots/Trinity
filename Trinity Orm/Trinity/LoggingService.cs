@@ -11,6 +11,8 @@ namespace Trinity
     {
 
 
+        
+
         public static LoggingService LogService
         {
             get;
@@ -30,7 +32,7 @@ namespace Trinity
 
         //TODO make with real service website
 
-        public static void SetMessage(string log, string message, ErrorType errorType)
+        public static void SendToLog(string log, string message, ErrorType errorType)
         {
             try
             {
@@ -87,14 +89,14 @@ namespace Trinity
                 {
                     LogService.RegisterError(exception2);
                 }
-                _errorLog += $"\n{exception2.Message}";
+                _errorLog += string.Format("\n{0}", exception2.Message);
             }
         }
 
         private void RegisterError(Exception exception2)
         {
             //TODO expand
-            throw new NotImplementedException();
+            throw new NotImplementedException("Register Error has not been implemented");
         }
     }
 }

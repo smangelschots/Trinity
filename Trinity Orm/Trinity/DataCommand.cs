@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Trinity
 {
@@ -135,8 +136,11 @@ namespace Trinity
             }
             catch (Exception exception)
             {
+                var message =
+                    $"Can't GetValue from property {name} try adding the [IgnoreAttribute] to the property {exception.Message} {exception.StackTrace}";
+                LoggingService.SendToLog("DataCommand", message, ErrorType.Error);
                 //TODO make this better
-                throw new NotImplementedException("Error in get value", exception);
+              //  throw new NotImplementedException("Error in get value ", exception);
             }
             return DBNull.Value;
         }
@@ -810,10 +814,11 @@ namespace Trinity
         }
 
         public IList<T> ExecuteToList()
-        {
+        { 
+          
             var list = new List<T>();
 
-            var result = this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
+            var result =   this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
             this.Manager.Remove(this);
             if (result != null)
             {
@@ -825,6 +830,39 @@ namespace Trinity
 
             return list;
         }
+
+        public async Task<IList<T>> ExecuteToListAsync()
+        {
+            var list = new List<T>();
+            var result = await this.Manager.ExecuteCommandAsync(this) as ModelCommandResult<T>;
+            this.Manager.Remove(this);
+            if (result != null)
+            {
+                if (result.HasErrors == false)
+                {
+                    list = result.Data.ToList();
+                }
+            }
+            return list;
+        }
+
+        public async void ExecuteToList(Action<IList<T>> callback)
+        {
+
+            var list = new List<T>();
+            var result = await this.Manager.ExecuteCommandAsync(this) as ModelCommandResult<T>;
+            this.Manager.Remove(this);
+            if (result != null)
+            {
+                if (result.HasErrors == false)
+                {
+                    list = result.Data.ToList();
+                }
+            }
+            callback.Invoke(list);
+                
+        }
+
     }
 
     public class CommandExpression
@@ -845,7 +883,7 @@ namespace Trinity
 
         public IDbConnection Connection { get; set; }
 
-        public string WhereText { get; set; }
+        protected string WhereText { get; set; }
 
         public string SqlCommandText { get; set; }
 
@@ -894,6 +932,16 @@ namespace Trinity
 
             this.Parameters = parameters;
 
+        }
+
+        public void SetWhereText(string text)
+        {
+            this.WhereText = text;
+        }
+
+        public string GetWhereText()
+        {
+            return this.WhereText;
         }
 
         public DataCommand(IDataManager manager)

@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trinity.MsSql;
 
 namespace Trinity.Test
@@ -6,11 +8,56 @@ namespace Trinity.Test
 
 
 
-    public class Country
+    public class Country : ModelBase
     {
-        public int CountryId { get; set; }
-        public string Name { get; set; }
+        private int _countryId;
+        private string _name;
 
+        public Country()
+        {
+            var config = new ModelConfiguration<Country>();
+            config.SetModelConfiguration(this);
+            config.SetRequired(m => m.Name, "test", ModelConfiguration.NotNullExpression);
+            config.AfterModelPropertyValidate += (s, e) =>
+            {
+                
+            };
+
+            this.Configuration = config;
+        }
+
+
+        public int CountryId
+        {
+            get { return _countryId; }
+            set
+            {
+                if (_countryId != value)
+                {
+                    _countryId = value;
+                    SendPropertyChanged("CountryId");
+                }
+               
+            }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    SendPropertyChanged("Name");
+                }
+            }
+        }
+
+        public override List<string> GetProperties()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -18,38 +65,38 @@ namespace Trinity.Test
     public class SqlUnitTest
     {
 
-        private static string username = "admin";
-        private static string password = "";
+        private static string username = "bouwnetadmin";
+        private static string password = "Service01";
 
 
         private string _connectionstring =
-            $"Data Source=localhost;Initial Catalog=TrinityTest;User Id={username};Password={password}";
+            string.Format("Data Source=localhost;Initial Catalog=TrinityTest;User Id={0};Password={1}", username,
+                password);
 
 
 
         [TestMethod]
         public void InsertTestMethod()
         {
-
-
-
             var db =
                 new SqlServerDataManager<Country>(
                     _connectionstring);
 
             db.Insert(new Country()
             {
+                CountryId =  1,
                 Name = "Belgium"
             });
 
             db.Insert(new Country()
             {
+                CountryId = 2,
                 Name = "Netherlands"
             });
 
             var result = db.SaveChanges();
 
-            Assert.IsFalse(result.HasErrors());
+            Assert.IsFalse(result.HasErrors);
         }
 
 
@@ -59,16 +106,13 @@ namespace Trinity.Test
             var db =
                 new SqlServerDataManager<Country>(
                     _connectionstring);
-
-
-            var item = db.Select().Where(m => m.Name == "Belgium").FirstOrDefault();
-
-            item.Name = "Belgium - BE";
-
+            var item = db.Select().Where(m => m.CountryId == 1).FirstOrDefault();
+            item.Name = "";
             db.Update(item);
+
             var result = db.SaveChanges();
 
-            Assert.IsFalse(result.HasErrors());
+            Assert.IsFalse(result.HasErrors,result.Error);
         }
 
         [TestMethod]
@@ -81,7 +125,7 @@ namespace Trinity.Test
             db.Delete().Where(m => m.Name == "Belgium");
             db.Delete().Where(m => m.Name == "Netherlands");
             var result = db.SaveChanges();
-            Assert.IsFalse(result.HasErrors());
+            Assert.IsFalse(result.HasErrors);
         }
 
 

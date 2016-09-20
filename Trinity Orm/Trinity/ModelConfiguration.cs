@@ -8,20 +8,50 @@ using System.Text.RegularExpressions;
 
 namespace Trinity
 {
-    [Bindable(false)]
-    [Browsable(false)]
-    public class ModelConfiguration<T> : IModelConfiguration where T : class
+    public abstract class ModelConfiguration
     {
-        protected IModelBase Model { get; set; }
-        public List<ModelValidation> Validations { get; set; }
-        public List<RegularExpression> Expressions { get; set; }
-        private List<ColumnConfiguration<T>> Columns { get; set; }
-        private List<Type> MergeWithEntities { get; set; } 
 
+        public event StartAddDefaultExpressionsEvent StartAddDefaultExpressions;
 
         public static string NoDateExpression = "NoDate";
         public static string NotNullExpression = "NotNull";
         public static string NotZeroExpression = "NotZero";
+
+        protected virtual void OnStartAddDefaultExpressions(StartAddDefaultExpressionsEventArgs args)
+        {
+            StartAddDefaultExpressions?.Invoke(this, args);
+        }
+    }
+
+    public delegate void StartAddDefaultExpressionsEvent(object sender, StartAddDefaultExpressionsEventArgs args);
+
+    public class StartAddDefaultExpressionsEventArgs
+    {
+        public IModelConfiguration Configuration { get; }
+
+        public StartAddDefaultExpressionsEventArgs(IModelConfiguration modelConfiguration)
+        {
+            this.Configuration = modelConfiguration;
+        }
+
+        public bool Cancel { get; set; }
+    }
+
+
+    [Bindable(false)]
+    [Browsable(false)]
+    public class ModelConfiguration<T> : ModelConfiguration, IModelConfiguration where T : class
+    {
+
+        public event ModelPropertyValidateEvent ModelPropertyValidate;
+        public event AfterModelPropertyValidateEvent AfterModelPropertyValidate;
+
+        protected IModelBase Model { get; set; }
+        public static List<ModelValidation> Validations { get; set; }
+        public static List<RegularExpression> Expressions { get; set; }
+        private static List<ColumnConfiguration<T>> Columns { get; set; }
+        private List<Type> MergeWithEntities { get; set; }
+
 
         public void AddExpression(string name, string expression, string message = "")
         {
@@ -29,30 +59,31 @@ namespace Trinity
             if (string.IsNullOrEmpty(name)) return;
             if (string.IsNullOrEmpty(expression)) return;
 
-            var exp = this.Expressions.FirstOrDefault(m => m.Name == name);
+            var exp = Expressions.FirstOrDefault(m => m.Name == name);
             if (exp != null) return;
 
-            this.Expressions.Add(new RegularExpression()
-                                 {
-                                     Name = name,
-                                     Expression = expression,
-                                     Message = message,
-                                 });
+            Expressions.Add(new RegularExpression()
+            {
+                Name = name,
+                Expression = expression,
+                Message = message,
+            });
         }
         public void RemoveExpression(string name)
         {
             if (string.IsNullOrEmpty(name)) return;
-            var exp = this.Expressions.FirstOrDefault(m => m.Name == name);
+            var exp = Expressions.FirstOrDefault(m => m.Name == name);
             if (exp == null) return;
 
-            this.Expressions.Remove(exp);
+            Expressions.Remove(exp);
         }
         public ModelConfiguration()
         {
-            this.Validations = new List<ModelValidation>();
-            this.Expressions = new List<RegularExpression>();
-            this.Columns  = new List<ColumnConfiguration<T>>();
+            Validations = new List<ModelValidation>();
+            Expressions = new List<RegularExpression>();
+            Columns = new List<ColumnConfiguration<T>>();
             this.MergeWithEntities = new List<Type>();
+            SetDefaultExpressions();
         }
 
         public ColumnConfiguration<T> Column<TField>(Expression<Func<T, TField>> field)
@@ -67,16 +98,22 @@ namespace Trinity
         {
             this.MergeWithEntities.Add(typeof(TClass));
             return this;
-        }  
+        }
 
 
         public void MergeModelConfiguration(IModelConfiguration configuration)
         {
-            foreach (var item in configuration.Expressions)
+            if (Expressions == null)
+                Expressions = new List<RegularExpression>();
+
+            if (Validations == null)
+                Validations = new List<ModelValidation>();
+
+            foreach (var item in Expressions)
             {
                 this.AddExpression(item.Name, item.Expression, item.Message);
             }
-            foreach (var item in configuration.Validations)
+            foreach (var item in Validations)
             {
                 this.SetValidation(item.Name, item.IsRequired, item.Message, item.RegExpression);
             }
@@ -84,7 +121,10 @@ namespace Trinity
 
         public virtual void SetDefaultExpressions()
         {
+            var arg = new StartAddDefaultExpressionsEventArgs(this);
 
+            OnStartAddDefaultExpressions(arg);
+            if (arg.Cancel) return;
             this.AddExpression(NoDateExpression, @"^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][2])00)|00)))$", "Geef een geldige datum in.");
             this.AddExpression(NotNullExpression, "^.+$", "Value may not be empty");
             this.AddExpression(NotZeroExpression, "^[0-9]*[1-9]+$|^[1-9]+[0-9]*$", "Select a value");
@@ -92,6 +132,9 @@ namespace Trinity
 
         public void SetModelConfiguration(IModelBase model)
         {
+
+            if (Validations == null)
+                Validations = new List<ModelValidation>();
 
             if (model == null)
             {
@@ -101,11 +144,10 @@ namespace Trinity
 
             this.Model.PropertyChanged -= this.Model_PropertyChanged;
 
-            foreach (var validation in this.Validations)
+            foreach (var validation in Validations)
             {
                 this.Model.SetColumnError(validation.Name, validation.Message);
             }
-
             this.Model.PropertyChanged += this.Model_PropertyChanged;
 
         }
@@ -115,63 +157,81 @@ namespace Trinity
             this.OnValidateProperty(e.PropertyName);
         }
 
+
+        
+
+
         public virtual ModelValidation OnValidateProperty(string propertyName)
         {
-            var validation = this.Validations.FirstOrDefault(m => m.Name == propertyName);
+            if (Validations == null)
+                Validations = new List<ModelValidation>();
+
+
+            var validation = Validations.FirstOrDefault(m => m.Name == propertyName);
             if (validation == null) return null;
             var value = this.GetValue(propertyName);
 
-            if (validation.IsRequired)
+            var arg = new ModelValidateEventArgs(validation, value);
+            OnModelPropertyValidate(arg);
+
+            if (arg.CancelDefaultValidation == false)
             {
-                if (value == null)
+
+                if (validation.IsRequired)
                 {
-                    this.AddError(validation);
-                    return validation;
-                }
-                if (!string.IsNullOrEmpty(validation.RegExpression))
-                {
-                    if (Regex.IsMatch(value.ToStringValue(), validation.Message))
+                    if (value == null)
                     {
-                        this.RemoveError(validation);
-                        return validation;
+                        arg.Valid = false;
                     }
-                    this.AddError(validation);
-                    return validation;
+                    else
+                    {
+
+                        if (!string.IsNullOrEmpty(validation.RegExpression))
+                        {
+                            if (Regex.IsMatch(value.ToStringValue(), validation.RegExpression))
+                            {
+                                arg.Valid = true;
+                            }
+                            else
+                            {
+                                arg.Valid = false;
+                            }
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(value.ToStringValue()))
+                            {
+                                arg.Valid = false;
+                            }
+                            else
+                            {
+                                arg.Valid = true;
+                            }
+                        }
+                    }
                 }
-                 if (!string.IsNullOrEmpty(value.ToStringValue()))
-                {
-                    this.RemoveError(validation);
-                    return validation;
-                }
-                 if (value.ToInt() != 0)
-                {
-                    this.RemoveError(validation);
-                    return validation;
-                }
-                this.AddError(validation);
-                return validation;
             }
-            if (!string.IsNullOrEmpty(validation.RegExpression))
+            OnAfterModelPropertyValidate(arg);
+
+            if (arg.Valid)
+                this.RemoveError(validation);
+            else
             {
-                if (Regex.IsMatch(value.ToStringValue(), validation.Message))
-                {
-                    this.RemoveError(validation);
-                    return validation;
-                }
                 this.AddError(validation);
-                return validation;
             }
             return validation;
         }
 
         private void AddError(ModelValidation validation)
         {
-            if (this.Model.Errors.ContainsKey(validation.Name))
+            if (this.Model == null) return;
+            if (this.Model.Errors.ContainsKey(validation.Name) == false)
                 this.Model.Errors.Add(validation.Name, validation.Message);
         }
 
         private void RemoveError(ModelValidation validation)
         {
+            if (this.Model == null) return;
             if (this.Model.Errors.ContainsKey(validation.Name))
             {
                 this.Model.Errors.Remove(validation.Name);
@@ -194,12 +254,15 @@ namespace Trinity
         public ModelConfiguration<T> SetValidation(string name, bool isRequired, string message, string regexName)
         {
 
-            var validation = this.Validations.FirstOrDefault(m => m.Name == name);
+            if (Validations == null)
+                Validations = new List<ModelValidation>();
+
+            var validation = Validations.FirstOrDefault(m => m.Name == name);
             if (validation == null)
             {
                 validation = new ModelValidation() { Name = name, IsRequired = isRequired, Message = message };
 
-                var expression = this.Expressions.FirstOrDefault(m => m.Name == regexName);
+                var expression = Expressions.FirstOrDefault(m => m.Name == regexName);
                 if (expression != null)
                 {
                     validation.RegExpression = expression.Expression;
@@ -208,7 +271,8 @@ namespace Trinity
                         validation.Message = expression.Message;
                     }
                 }
-                this.Validations.Add(validation);
+                Validations.Add(validation);
+                AddError(validation);
             }
             return this;
         }
@@ -232,9 +296,16 @@ namespace Trinity
             this.SetRequired(field, message, string.Empty);
             return this;
         }
+
+        public ModelConfiguration<T> SetRequiredString<TField>(Expression<Func<T, TField>> field, string message)
+        {
+            this.SetRequired(field, message, NotNullExpression);
+            return this;
+        }
+
         public ModelConfiguration<T> SetRequiredDate<TField>(Expression<Func<T, TField>> field, string message)
         {
-            this.SetRequired(field, NoDateExpression, message);
+            this.SetRequired(field, message, NoDateExpression);
             return this;
         }
 
@@ -256,6 +327,40 @@ namespace Trinity
                 throw new ArgumentException("static method");
 
             return memberExpression.Member.Name;
+        }
+
+        protected virtual void OnModelPropertyValidate(ModelValidateEventArgs args)
+        {
+            ModelPropertyValidate?.Invoke(this, args);
+        }
+
+        protected virtual void OnAfterModelPropertyValidate(ModelValidateEventArgs args)
+        {
+            AfterModelPropertyValidate?.Invoke(this, args);
+        }
+
+        public void Validate()
+        {
+            var items = Model.GetProperties();
+        }
+    }
+
+    public delegate void AfterModelPropertyValidateEvent(object sender, ModelValidateEventArgs args);
+    public delegate void ModelPropertyValidateEvent(object sender, ModelValidateEventArgs args);
+
+    public class ModelValidateEventArgs
+    {
+        public ModelValidation Validation { get; }
+        public object Value { get; }
+        public bool CancelDefaultValidation { get; set; }
+
+        public bool Valid { get; set; }
+
+
+        public ModelValidateEventArgs(ModelValidation validation, object value)
+        {
+            Validation = validation;
+            Value = value;
         }
     }
 }

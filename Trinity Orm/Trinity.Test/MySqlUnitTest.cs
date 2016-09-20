@@ -1,5 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using System.Security.Permissions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
+using Trinity.MsSql;
 using Trinity.MySql;
 
 namespace Trinity.Test
@@ -29,6 +32,19 @@ namespace Trinity.Test
             
         }
 
+        [TestMethod]
+        public void DataManager()
+        {
+            var t = new SqlDataBindingList<Adress>("", "", new string[] {});
+
+            var c =   t.DataManager.GetCommands();
+            foreach (var dataCommand in c)
+            {
+                if (dataCommand.CommandType == DataCommandType.Update)
+                {
+                }
+            }
+        }
 
         [TestMethod]
         public void StandardTest()

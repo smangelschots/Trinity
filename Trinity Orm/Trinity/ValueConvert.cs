@@ -34,22 +34,18 @@ namespace Trinity
                         }
                         catch (Exception exception)
                         {
-
-
                         }
-
-
                     }
                 }
 
                 if (fieldFound == false)
                 {
-                    LoggingService.SetMessage("TryGetDataValue", string.Format("Cant find field {0} ", name), ErrorType.Error);
+                    LoggingService.SendToLog("TryGetDataValue", string.Format("Cant find field {0} ", name), ErrorType.Error);
                 }
             }
             catch (Exception exception)
             {
-                LoggingService.SetMessage("TryGetDataValue cant convert", name + " " + exception.Message + " " + exception.StackTrace, ErrorType.Error);
+                LoggingService.SendToLog("TryGetDataValue cant convert", name + " " + exception.Message + " " + exception.StackTrace, ErrorType.Error);
             }
             return default(T);
         }
@@ -67,91 +63,62 @@ namespace Trinity
                     return OleDbType.Binary;
                 case SqlDbType.Bit:
                     return OleDbType.Boolean;
-                    break;
                 case SqlDbType.Char:
                     return OleDbType.Char;
-                    break;
                 case SqlDbType.DateTime:
                     return OleDbType.DBTimeStamp;
-                    break;
                 case SqlDbType.Decimal:
                     return OleDbType.Decimal;
-                    break;
                 case SqlDbType.Float:
                     return OleDbType.Double;
-                    break;
                 case SqlDbType.Image:
                     return OleDbType.Variant;
-                    break;
                 case SqlDbType.Int:
                     return OleDbType.Integer;
-                    break;
                 case SqlDbType.Money:
                     return OleDbType.Currency;
-                    break;
                 case SqlDbType.NChar:
                     return OleDbType.WChar;
-                    break;
                 case SqlDbType.NText:
                     return OleDbType.VarWChar;
-                    break;
                 case SqlDbType.NVarChar:
                     return OleDbType.VarWChar;
-                    break;
                 case SqlDbType.Real:
                     return OleDbType.Single;
-                    break;
                 case SqlDbType.UniqueIdentifier:
                     return OleDbType.Guid;
-                    break;
                 case SqlDbType.SmallDateTime:
                     return OleDbType.DBDate;
-                    break;
                 case SqlDbType.SmallInt:
-                    return OleDbType.SmallInt;
-                    break;
+                    return OleDbType.SmallInt;;
                 case SqlDbType.SmallMoney:
                     return OleDbType.Currency;
-                    break;
                 case SqlDbType.Text:
                     return OleDbType.VarWChar;
-                    break;
                 case SqlDbType.Timestamp:
                     return OleDbType.DBTimeStamp;
-                    break;
                 case SqlDbType.TinyInt:
                     return OleDbType.TinyInt;
-                    break;
                 case SqlDbType.VarBinary:
                     return OleDbType.VarBinary;
-                    break;
                 case SqlDbType.VarChar:
                     return OleDbType.VarChar;
-                    break;
                 case SqlDbType.Variant:
                     return OleDbType.Variant;
-                    break;
                 case SqlDbType.Xml:
                     return OleDbType.VarWChar;
-                    break;
                 case SqlDbType.Udt:
                     return OleDbType.Variant;
-                    break;
                 case SqlDbType.Structured:
                     return OleDbType.Variant;
-                    break;
                 case SqlDbType.Date:
                     return OleDbType.Date;
-                    break;
                 case SqlDbType.Time:
                     return OleDbType.DBTime;
-                    break;
                 case SqlDbType.DateTime2:
                     return OleDbType.DBTimeStamp;
-                    break;
                 case SqlDbType.DateTimeOffset:
                     return OleDbType.DBTimeStamp;
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException("sqlDbType");
             }
@@ -177,14 +144,7 @@ namespace Trinity
                 {
                     return tempValue;
                 }
-
-                else
-                {
-
-                }
-
             }
-
             return 0;
         }
 
@@ -458,7 +418,6 @@ namespace Trinity
         }
 
 
-
         public static bool ToBool(this object value)
         {
             if (value == null || value == DBNull.Value)
@@ -633,20 +592,20 @@ namespace Trinity
 
             return miles.Value * 1609.344;
         }
-        public static int GetAge(this DateTime Birthday)
+        public static int GetAge(this DateTime birthday)
         {
             DateTime now = DateTime.Now;
-            int Years = now.Year - Birthday.Year;
+            int Years = now.Year - birthday.Year;
 
             if (Years > 0)
             {
-                if (now.Month < Birthday.Month)
+                if (now.Month < birthday.Month)
                 {
                     Years = Years - 1;
                 }
-                else if (now.Month == Birthday.Month)
+                else if (now.Month == birthday.Month)
                 {
-                    if (now.Day < Birthday.Day)
+                    if (now.Day < birthday.Day)
                     {
                         Years = Years - 1;
                     }
@@ -659,10 +618,10 @@ namespace Trinity
             }
             return 0;
         }
-        public static DateTime SetHours(this DateTime MyDate, string strHour)
+        public static DateTime SetHours(this DateTime date, string strHour)
         {
-            MyDate = DateTime.Parse((String.Format("{0} {1}", MyDate.ToShortDateString(), strHour)));
-            return MyDate;
+            date = DateTime.Parse((String.Format("{0} {1}", date.ToShortDateString(), strHour)));
+            return date;
         }
         public static int ToInt(this bool value)
         {

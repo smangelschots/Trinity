@@ -6,5 +6,8 @@
         public DataBindingList(IModelCommand<T> dataManager) : base(dataManager)
         {
         }
+
+
+
     }
 }

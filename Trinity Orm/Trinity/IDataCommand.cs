@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Trinity
 {
@@ -67,6 +68,7 @@ namespace Trinity
         IDataCommand<T> OrderByDesc(string column);
 
         IList<T> ExecuteToList();
+        Task<IList<T>> ExecuteToListAsync();
 
         T FirstOrDefault();
 

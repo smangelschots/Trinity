@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Trinity
@@ -7,8 +8,21 @@ namespace Trinity
     public class ResultList : List<ICommandResult>
     {
 
+        public event SentCommandResultMessageEvent SentCommandResultMessage;
+        public delegate void SentCommandResultMessageEvent(object sender, SentCommandResultMessageEventArgs args);
 
-        public string GetErrorString()
+        public class SentCommandResultMessageEventArgs
+        {
+            public CommandResult Result { get; }
+
+            public SentCommandResultMessageEventArgs(CommandResult result)
+            {
+                Result = result;
+            }
+        }
+
+
+        private string GetError()
         {
             var temString = string.Empty;
             var errors = this.Where(m => m.HasErrors);
@@ -19,7 +33,7 @@ namespace Trinity
                 foreach (DataError error in dataResult.CommandErrors)
                 {
                     if (error.Exception != null)
-                        result += string.Format("{0} {1} {2} {3}",  error.ErrorType.ToEnumValue<ErrorType>(string.Empty) , error.Message ,  error.Exception.Message , Environment.NewLine);
+                        result += string.Format("{0} {1} {2} {3}", error.ErrorType.ToEnumValue<ErrorType>(string.Empty), error.Message, error.Exception.Message, Environment.NewLine);
                     else
                     {
                         result += string.Format("{0} {1} {2}", error.ErrorType.ToEnumValue<ErrorType>(string.Empty), error.Message, Environment.NewLine);
@@ -27,12 +41,57 @@ namespace Trinity
                 }
             }
             return result;
-       }
-        
+        }
 
-        public bool HasErrors()
+
+
+        public string Error
         {
-            return this.Any(m => m.HasErrors);
+            get { return GetError(); }
+        }
+
+
+
+
+        public int GetRecordsAffected()
+        {
+            int recordsAffectedCount = 0;
+            foreach (var command in this)
+            {
+                recordsAffectedCount += command.RecordsAffected;
+            }
+
+            return recordsAffectedCount;
+        }
+
+
+        public List<ICommandResult> AffectedCommands
+        {
+            get
+            {
+                return this.Where(m => m.RecordsAffected > 0).ToList(); ;
+            }
+        }
+
+        public List<ICommandResult> ErrorCommands
+        {
+            get { return this.Where(m => m.HasErrors).ToList(); }
+        }
+
+        public int AffectedRecords
+        {
+            get { return GetRecordsAffected(); }
+        }
+
+        public int Errors
+        {
+            get { return this.Count(m => m.HasErrors); }
+        }
+
+
+        public bool HasErrors
+        {
+            get { return this.Any(m => m.HasErrors); }
         }
 
         public ResultList CreateError(string message)
@@ -45,6 +104,8 @@ namespace Trinity
                 HasError = true,
                 Message = message
             });
+            OnSentCommandResultMessage(new SentCommandResultMessageEventArgs(result));
+
 
             this.Add(result);
 
@@ -60,6 +121,7 @@ namespace Trinity
                 HasError = true,
                 Message = message
             });
+            OnSentCommandResultMessage(new SentCommandResultMessageEventArgs(result));
 
             this.Add(result);
 
@@ -75,10 +137,19 @@ namespace Trinity
                 HasError = true,
                 Message = message
             });
+            OnSentCommandResultMessage(new SentCommandResultMessageEventArgs(result));
 
             this.Add(result);
 
             return this;
         }
+
+        protected virtual void OnSentCommandResultMessage(SentCommandResultMessageEventArgs args)
+        {
+            SentCommandResultMessage?.Invoke(this, args);
+
+        }
     }
+
+
 }

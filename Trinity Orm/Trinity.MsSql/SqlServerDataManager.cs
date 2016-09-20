@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Trinity.MsSql
 {
@@ -41,15 +43,44 @@ namespace Trinity.MsSql
             {
                 dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> { ModelCommand = dataCommand });
             }
-            var item = model as INotifyPropertyChanged;
-            if (item != null)
+
+
+            if (model is IModelBase)
             {
+                var item = model as IModelBase;
+                item.PropertyChanging += (sender, args) =>
+                {
+
+                    if (model is IObjectDataManager)
+                    {
+                        var manager = model as IObjectDataManager;
+                        var value = manager.GetData(args.PropertyName);
+
+                        if (item.OldValues.ContainsKey(args.PropertyName))
+                            item.OldValues[args.PropertyName] = value;
+                        else
+                        {
+                            item.OldValues.Add(args.PropertyName, value);
+                        }
+                    }
+
+                    //TODO imp 
+
+                };
+
+
+            }
+
+            if (model is INotifyPropertyChanged)
+            {
+                var item = model as INotifyPropertyChanged;
                 item.PropertyChanged += (e, r) =>
                 {
                     var property = item.GetType().GetProperty(r.PropertyName);
                     dataCommand.AddPropertyChange(property);
                 };
             }
+
             return dataCommand;
         }
         public IDataCommand<T> Insert(T model)
@@ -107,22 +138,24 @@ namespace Trinity.MsSql
 
             return result;
         }
+
+
+
         protected override ICommandResult ExecuteUpdateCommand(SqlModelCommand<T> dataCommand, IDbCommand command)
         {
 
             var result = new ModelCommandResult<T>();
             var item = dataCommand.Model as IModelBase;
-
+            //TODO beforeExectute
             if (item != null)
             {
-
                 if (item.Error == null)
                     if (item.HasErrors())
                     {
+                        result.AddError(ErrorType.Error, "Model has validation error");
                         return result;
                     }
             }
-
             if (TableMapFromDatabase)
                 dataCommand.GetTableMap();
 
@@ -206,6 +239,7 @@ namespace Trinity.MsSql
                 if (item.Errors != null)
                     if (item.HasErrors())
                     {
+                        result.AddError(ErrorType.Error, "Model has validation error");
                         return result;
                     }
             }
@@ -230,7 +264,6 @@ namespace Trinity.MsSql
                     if (column.IsIdentity)
                     {
                         select += string.Format(" {0},", column.ColumnName);
-                        where = string.Format("{0} = @@IDENTITY", column.ColumnName);
                         identity = true;
                         retunColums.Add(column.ColumnName, column.PropertyName);
                         if (dataCommand.Changes.Contains(column.PropertyName))
@@ -256,12 +289,9 @@ namespace Trinity.MsSql
 
             if (identity)
             {
-                select = select.Remove(select.Length - 1);
-                dataCommand.WhereText = string.Format(
-                    " SELECT {0} FROM [{1}] WHERE {2}",
-                    select,
-                    dataCommand.TabelName,
-                    where);
+                dataCommand.SetWhereText(string.Format(
+                    " SELECT SCOPE_IDENTITY() as [{0}]", retunColums.FirstOrDefault().Key
+                    ));
             }
 
 
@@ -288,7 +318,7 @@ namespace Trinity.MsSql
                 else
                 {
 
-                    dataCommand.WhereText = string.Empty;
+                    dataCommand.SetWhereText(string.Empty);
                     dataCommand.CommandType = DataCommandType.Update;
 
 
@@ -300,7 +330,7 @@ namespace Trinity.MsSql
                     {
                         var name = dataReader.GetName(i);
                         var property = retunColums[name];
-                        dataCommand.SetValue(property, dataReader.GetValue(i));
+                        dataCommand.SetValue(property, dataReader.GetValue(i).ToInt());
                     }
                 }
 
@@ -310,9 +340,10 @@ namespace Trinity.MsSql
             result.DataCommand = dataCommand;
             return result;
         }
-        protected override ICommandResult ExecuteSelectCommand(SqlModelCommand<T> dataCommand, IDbCommand command)
+
+        protected override async Task<ICommandResult> ExecuteSelectCommandAsync(SqlModelCommand<T> dataCommand, IDbCommand command)
         {
-          
+
             if (TableMapFromDatabase)
                 dataCommand.GetTableMap();
 
@@ -325,13 +356,15 @@ namespace Trinity.MsSql
             try
             {
                 int rowsIndex = 0;
-                using (var r = command.ExecuteReader())
+                var sqlCommand = command as SqlCommand;
+
+                using (SqlDataReader r = await sqlCommand.ExecuteReaderAsync())
                 {
 
                     this.OnExecutedCommand(command);
                     Type objectType = typeof(T);
 
-                    if (objectType == typeof (DataTable))
+                    if (objectType == typeof(DataTable))
                     {
 
                         result = new DataTabelCommandResult();
@@ -339,12 +372,12 @@ namespace Trinity.MsSql
                         dt.Load(r);
                         ((DataTabelCommandResult)result).Data = dt;
 
-                        return result;
+                        return  result;
                     }
-                     result = new ModelCommandResult<T>();
+                    result = new ModelCommandResult<T>();
 
-
-                    while (r.Read())
+                    var tablename = dataCommand.GetTableAttribute();
+                    while (await r.ReadAsync())
                     {
                         bool userDataManager = false;
                         var newObject = (T)Activator.CreateInstance(objectType);
@@ -355,7 +388,14 @@ namespace Trinity.MsSql
 
                         if (dataCommand.TableMap != null)
                             if (dataCommand.TabelName != objectType.Name)
-                                userDataManager = false;
+                            {
+                                if (tablename == dataCommand.TabelName)
+                                    if (dataManager != null)
+                                        userDataManager = true;
+                                    else
+                                        userDataManager = false;
+                            }
+
                         if (userDataManager)
                         {
                             dataManager.SetData(r);
@@ -439,6 +479,146 @@ namespace Trinity.MsSql
         }
 
 
+        protected override  ICommandResult ExecuteSelectCommand(SqlModelCommand<T> dataCommand, IDbCommand command)
+        {
+
+            if (TableMapFromDatabase)
+                dataCommand.GetTableMap();
+
+            dataCommand.BuildSqlCommand();
+            dataCommand.BuildSqlParameters(command);
+            command.CommandText = dataCommand.SqlCommandText;
+            var items = new List<T>();
+            ICommandResult result = null;
+
+            try
+            {
+                int rowsIndex = 0;
+                using (SqlDataReader r = command.ExecuteReader() as SqlDataReader)
+                {
+
+                    this.OnExecutedCommand(command);
+                    Type objectType = typeof(T);
+
+                    if (objectType == typeof(DataTable))
+                    {
+
+                        result = new DataTabelCommandResult();
+                        var dt = new DataTable(dataCommand.TabelName);
+                        dt.Load(r);
+                        ((DataTabelCommandResult)result).Data = dt;
+
+                        return result;
+                    }
+                    result = new ModelCommandResult<T>();
+
+                    var tablename = dataCommand.GetTableAttribute();
+                    while (r.Read())
+                    {
+                        bool userDataManager = false;
+                        var newObject = (T)Activator.CreateInstance(objectType);
+                        var dataManager = newObject as IObjectDataManager;
+
+
+                        if (dataCommand.TableMap != null)
+                            if (dataCommand.TabelName != objectType.Name)
+                            {
+                                if (tablename == dataCommand.TabelName)
+                                    if (dataManager != null)
+                                        userDataManager = true;
+                                    else
+                                        userDataManager = false;
+                            }
+                            else
+                            {
+
+                                if (dataManager != null)
+                                    userDataManager = true;
+                            }
+
+                        if (userDataManager)
+                        {
+                            dataManager.SetData(r);
+
+                        }
+                        else
+                        {
+
+                            //TODO Change code to use Reflection.Emit 
+                            int counter = r.FieldCount;
+                            for (int i = 0; i < counter; i++)
+                            {
+                                var name = r.GetName(i);
+                                try
+                                {
+                                    var fieldType = r.GetFieldType(i);
+                                    var value = r.GetValue(i);
+                                    if (dataCommand.TableMap != null)
+                                    {
+                                        var column = dataCommand.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == name);
+
+                                        if (column != null)
+                                        {
+                                            if (!string.IsNullOrEmpty(column.PropertyName))
+                                            {
+                                                var prop = objectType.GetProperty(column.PropertyName);
+                                                if (prop != null)
+                                                {
+                                                    if (value != DBNull.Value)
+                                                    {
+                                                        prop.SetValue(newObject, value, null);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                TrySetValue(dataCommand, newObject, objectType, name, value);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            TrySetValue(dataCommand, newObject, objectType, name, value);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var prop = objectType.GetProperty(name);
+                                        if (prop != null)
+                                        {
+                                            if (value != DBNull.Value)
+                                            {
+                                                prop.SetValue(newObject, value, null);
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    result.AddError(ErrorType.Error, string.Format("{1} {0} ", name, dataCommand.TabelName), ex);
+                                }
+                            }
+                        }
+                        items.Add(newObject);
+                        rowsIndex++;
+                    }
+                }
+                result.RecordsAffected = rowsIndex;
+            }
+            catch (Exception exception)
+            {
+                result.AddError(ErrorType.Error, dataCommand.TabelName + " " + typeof(T).FullName, exception);
+            }
+
+            ((ModelCommandResult<T>)result).Data = items;
+            result.AddMessage(string.Format("{0} executed with {1} rows affected", dataCommand.SqlCommandText, result.RecordsAffected));
+            //TODO change class to use base type
+            dataCommand.OnCommandExecuted(new ModelCommandExecutedEventArgs<T> { Result = (ModelCommandResult<T>)result });
+            dataCommand.ResetCommand();
+            result.DataCommand = dataCommand;
+            return result;
+        }
+
 
         private void TrySetValue(IDataCommand dataCommand, object newObject, Type objectType, string name, object value)
         {
@@ -488,9 +668,21 @@ namespace Trinity.MsSql
             }
         }
 
-        public IEnumerable<IDataCommand> GetCommands()
+        protected override Task<ICommandResult> ExecuteDeleteCommandAsync(SqlModelCommand<T> dataCommand, IDbCommand command)
         {
-            return Commands;
+            throw new NotImplementedException();
         }
+
+        protected override Task<ICommandResult> ExecuteUpdateCommandAsync(SqlModelCommand<T> dataCommand, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<ICommandResult> ExecuteInsertCommandAsync(SqlModelCommand<T> dataCommand, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

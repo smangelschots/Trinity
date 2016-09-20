@@ -8,15 +8,11 @@ namespace Trinity
         new event PropertyChangingEventHandler PropertyChanging;
 
         new event PropertyChangedEventHandler PropertyChanged;
-
-
         void SetColumnError(string columnName, string error);
 
         void SendPropertyChanging(string propertyName);
 
         void SendPropertyChanged(string propertyName);
-
-
         Dictionary<string, string> Errors { get; set; }
         Dictionary<string, object> OldValues { get; set; }
 
@@ -25,5 +21,6 @@ namespace Trinity
 
         bool HasErrors();
         void ClearErrors();
+        List<string> GetProperties();
     }
 }

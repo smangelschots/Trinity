@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Trinity.Ole
 {
@@ -21,6 +22,8 @@ namespace Trinity.Ole
             : base(connectionString, providerName)
         {
         }
+
+
 
         protected override ICommandResult ExecuteDeleteCommand(OleModelCommand<T> dataCommand, IDbCommand command)
         {
@@ -141,11 +144,11 @@ namespace Trinity.Ole
             if (identity)
             {
                 select = select.Remove(select.Length - 1);
-                dataCommand.WhereText = string.Format(
+                dataCommand.SetWhereText(string.Format(
                     " SELECT {0} FROM {1} WHERE {2}",
                     select,
                     dataCommand.TabelName,
-                    where);
+                    where));
             }
 
             foreach (var change in dataCommand.Changes)
@@ -287,6 +290,24 @@ namespace Trinity.Ole
             return dataCommand;
         }
 
+        protected override Task<ICommandResult> ExecuteDeleteCommandAsync(OleModelCommand<T> dataCommand, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
 
+        protected override Task<ICommandResult> ExecuteUpdateCommandAsync(OleModelCommand<T> dataCommand, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<ICommandResult> ExecuteInsertCommandAsync(OleModelCommand<T> dataCommand, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<ICommandResult> ExecuteSelectCommandAsync(OleModelCommand<T> dataCommand, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
