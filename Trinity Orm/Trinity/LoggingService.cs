@@ -11,7 +11,7 @@ namespace Trinity
     {
 
 
-        
+    
 
         public static LoggingService LogService
         {

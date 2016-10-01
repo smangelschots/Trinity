@@ -241,8 +241,10 @@ namespace Trinity
                     .WithKeys(this.PrimaryKeys)
                     .From(this.TableName);
                 newItemAdded = false;
+                _cancelEvents = true;
                 base.Add(item);
                 this.OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, item, null, 0, false));
+                _cancelEvents = false;
 
             }
         }
@@ -266,9 +268,12 @@ namespace Trinity
             .ForUpdate()
             .WithKeys(this.PrimaryKeys)
             .From(this.TableName);
+
             newItemAdded = false;
+            _cancelEvents = true;
             base.Insert(index, model);
             OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
+            _cancelEvents = false;
         }
 
         public void InsertForInsert(int index, T model)
@@ -278,9 +283,12 @@ namespace Trinity
             .ForInsert()
             .WithKeys(this.PrimaryKeys)
             .From(this.TableName);
+
             newItemAdded = false;
+            _cancelEvents = true;
             base.Insert(index, model);
             OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
+            _cancelEvents = false;
         }
 
         public void AddForInsert(T model, bool triggerEvents = true)
@@ -290,11 +298,12 @@ namespace Trinity
               .ForInsert()
               .WithKeys(this.PrimaryKeys)
               .From(this.TableName);
+
             newItemAdded = false;
+            _cancelEvents = true;
             base.Add(model);
-
-
             OnAfterModelAddedForInsert(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
+            _cancelEvents = false;
         }
 
         public void AddForUpdate(T model)
@@ -304,9 +313,12 @@ namespace Trinity
             .ForUpdate()
             .WithKeys(this.PrimaryKeys)
             .From(this.TableName);
+
             newItemAdded = false;
+            _cancelEvents = true;
             base.Add(model);
             OnAfterModelAddedForUpdate(new DataCommandCollectionEventArgs(ChangeType.Adding, model, null, 0, false));
+            _cancelEvents = false;
         }
 
         public virtual ResultList SaveChanges()

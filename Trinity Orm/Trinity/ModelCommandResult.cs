@@ -6,6 +6,7 @@ namespace Trinity
     {
         public IEnumerable<T> Data { get; set; }
 
+
         public string ToJson()
         {
             return null;

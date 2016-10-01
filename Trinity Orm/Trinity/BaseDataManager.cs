@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -229,11 +230,17 @@ namespace Trinity
 
         public ICommandResult ExecuteCommand(IDataCommand dataCommand)
         {
-            var result = new CommandResult();
+            ICommandResult result = new CommandResult();
+
+
+            var timer = new Stopwatch();
+            timer.Start();
 
             try
             {
                 if (dataCommand.Validate() == false) return null;
+
+
                 this.OpenSharedConnection();
                 try
                 {
@@ -244,13 +251,17 @@ namespace Trinity
                         switch (dataCommand.CommandType)
                         {
                             case DataCommandType.Select:
-                                return this.ExecuteSelectCommand((T)dataCommand, command);
+                                result = this.ExecuteSelectCommand((T)dataCommand, command);
+                                break;
                             case DataCommandType.Insert:
-                                return ExecuteInsertCommand((T)dataCommand, command);
+                                result = ExecuteInsertCommand((T)dataCommand, command);
+                                break;
                             case DataCommandType.Update:
-                                return ExecuteUpdateCommand((T)dataCommand, command);
+                                result = ExecuteUpdateCommand((T)dataCommand, command);
+                                break;
                             case DataCommandType.Delete:
-                                return ExecuteDeleteCommand((T)dataCommand, command);
+                                result = ExecuteDeleteCommand((T)dataCommand, command);
+                                break;
                         }
                     }
                 }
@@ -276,7 +287,13 @@ namespace Trinity
             {
                 if (this.Transaction == null)
                     this.Connection.Close();
+
+
+                timer.Stop();
+                result.AddMessage($"Executed {dataCommand.CommandType} in {timer.ElapsedMilliseconds}ms with {result.RecordsAffected} rows affected");
+
             }
+
 
             return result;
         }

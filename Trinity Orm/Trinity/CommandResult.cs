@@ -31,6 +31,8 @@ namespace Trinity
         public List<DataError> CommandErrors { get; set; }
         public List<string> Messages { get; set; }
 
+        public string CommandText { get; set; }
+
         public void AddError(ErrorType errorType, string message, Exception exception = null)
         {
             this.CommandErrors.Add(new DataError()

@@ -24,7 +24,9 @@ namespace Trinity.MsSql
         }
 
 
-        public SqlModelCommand(IDataManager manager) : base(manager) { }
+        public SqlModelCommand(IDataManager manager) : base(manager)
+        {
+        }
 
         public override void ResetCommand()
         {
@@ -36,7 +38,7 @@ namespace Trinity.MsSql
         {
             {
                 var newDataParameter = this.Parameters.SingleOrDefault(
-                     m => m.Name.Contains(parameterName));
+                    m => m.Name.Contains(parameterName));
 
                 if (newDataParameter == null)
                 {
@@ -47,8 +49,9 @@ namespace Trinity.MsSql
                     newDataParameter.IsSelectParameter = isSelectParameter;
                     this.Columns.Add(column);
                     this.Parameters.Add(newDataParameter);
-                };
-             
+                }
+                ;
+
                 newDataParameter.Value = value;
             }
         }
@@ -84,7 +87,18 @@ namespace Trinity.MsSql
                 {
                     var tableMap = this.TableMap ?? new TableMap();
                     tableMap.TableName = this.TabelName;
-                    Manager.TableMaps.Add(modelName, tableMap);
+                    if (Manager.TableMaps.ContainsKey(modelName) == false)
+                    {
+                        try
+                        {
+                            Manager.TableMaps.Add(modelName, tableMap);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        
+                    }
                     this.TableMap = tableMap;
                     string sqlTableMap =
                             string.Format(

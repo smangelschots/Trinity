@@ -77,6 +77,11 @@ namespace Trinity
 
             Expressions.Remove(exp);
         }
+
+
+
+
+
         public ModelConfiguration()
         {
             Validations = new List<ModelValidation>();
@@ -143,7 +148,6 @@ namespace Trinity
             this.Model = model;
 
             this.Model.PropertyChanged -= this.Model_PropertyChanged;
-
             foreach (var validation in Validations)
             {
                 this.Model.SetColumnError(validation.Name, validation.Message);
@@ -158,7 +162,7 @@ namespace Trinity
         }
 
 
-        
+
 
 
         public virtual ModelValidation OnValidateProperty(string propertyName)

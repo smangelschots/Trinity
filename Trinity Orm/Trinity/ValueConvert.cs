@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -90,7 +91,7 @@ namespace Trinity
                 case SqlDbType.SmallDateTime:
                     return OleDbType.DBDate;
                 case SqlDbType.SmallInt:
-                    return OleDbType.SmallInt;;
+                    return OleDbType.SmallInt; ;
                 case SqlDbType.SmallMoney:
                     return OleDbType.Currency;
                 case SqlDbType.Text:
@@ -416,6 +417,18 @@ namespace Trinity
             double.TryParse(value.ToString(), out myT);
             return myT;
         }
+        public static float ToFloat(this object value)
+        {
+            float myD;
+            if (value == null || value == DBNull.Value)
+                return 0;
+            if (value.ToString().Contains(","))
+            {
+                value = value.ToString().Replace(".", "");
+            }
+            float.TryParse(value.ToString(), out myD);
+            return myD;
+        }
 
 
         public static bool ToBool(this object value)
@@ -496,7 +509,16 @@ namespace Trinity
             return value;
         }
 
+        public static char ToChar(this object value)
+        {
+            char temp;
 
+            if (value == null || value == DBNull.Value)
+                return new char();
+
+            char.TryParse(value.ToStringValue(), out temp);
+            return temp;
+        }
 
         public static T ToEnumValue<T>(this object value, object defaultValue)
         {
@@ -526,6 +548,55 @@ namespace Trinity
             }
             return (T)result;
         }
+
+        public static object ConvertValue(this object value, PropertyInfo prop)
+        {
+            var propertyType = prop.PropertyType;
+            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+            var returnType = underlyingType ?? propertyType;
+            var typeCode = Type.GetTypeCode(returnType);
+
+            switch (typeCode)
+            {
+                case TypeCode.DBNull:
+                case TypeCode.Object:
+                case TypeCode.Empty:
+                    return value;
+                case TypeCode.SByte:
+                    return value.BaseConvert<SByte>();
+                case TypeCode.Byte:
+                    return value.ToByte();
+                case TypeCode.Boolean:
+                    return value.ToBool();
+                case TypeCode.Char:
+                    return value.ToChar();
+                case TypeCode.Int16:
+                    return value.ToInt();
+                case TypeCode.UInt16:
+                    return value.ToInt();
+                case TypeCode.Int32:
+                    return value.ToInt32();
+                case TypeCode.UInt32:
+                    return value.ToInt();
+                case TypeCode.Int64:
+                    return value.ToInt();
+                case TypeCode.UInt64:
+                    return value.ToInt();
+                case TypeCode.Single:
+                    return value.ToFloat();
+                case TypeCode.Double:
+                    return value.ToDouble();
+                case TypeCode.Decimal:
+                    return value.ToDecimal();
+                case TypeCode.DateTime:
+                    return value.ToDateTime();
+                case TypeCode.String:
+                    return value.ToStringValue();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
 
         public static string ToSqlDateTimeString(this DateTime date)
         {

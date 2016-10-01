@@ -1,0 +1,12 @@
+CREATE TABLE [dbo].[ErrorLog](
+	[idErrorLog] [int] IDENTITY(1,1) NOT NULL,
+	[Message] [nvarchar](max) NOT NULL,
+	[Logname] [nvarchar](50) NOT NULL,
+	[EventType] [nvarchar](50) NOT NULL,
+	[InsertDate] [datetime] NOT NULL,
+	[InsertBy] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_ErrorLog] PRIMARY KEY CLUSTERED 
+(
+	[idErrorLog] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
