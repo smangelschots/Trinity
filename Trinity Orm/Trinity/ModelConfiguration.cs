@@ -56,18 +56,49 @@ namespace Trinity
         public void AddExpression(string name, string expression, string message = "")
         {
 
-            if (string.IsNullOrEmpty(name)) return;
-            if (string.IsNullOrEmpty(expression)) return;
-
-            var exp = Expressions.FirstOrDefault(m => m.Name == name);
-            if (exp != null) return;
-
-            Expressions.Add(new RegularExpression()
+            try
             {
-                Name = name,
-                Expression = expression,
-                Message = message,
-            });
+                if (string.IsNullOrEmpty(name)) return;
+                if (string.IsNullOrEmpty(expression)) return;
+
+
+                RegularExpression exp = null;
+                if (Expressions == null)
+                    Expressions = new List<RegularExpression>();
+
+                for (int i = Expressions.Count - 1; i >= 0; i--)
+                {
+                    if (Expressions[i] != null)
+                        if (Expressions[i].Name == name)
+                        {
+                            exp = Expressions[i];
+                            break;
+                        }
+
+                }
+
+                //for (int i = 0; i < Expressions.Count; i++)
+                //{
+
+                //}
+
+
+                if (exp != null) return;
+
+                Expressions.Add(new RegularExpression()
+                {
+                    Name = name,
+                    Expression = expression,
+                    Message = message,
+                });
+
+            }
+            catch (Exception e)
+            {
+                LoggingService.SendToLog(e);
+            }
+
+
         }
         public void RemoveExpression(string name)
         {
@@ -148,10 +179,18 @@ namespace Trinity
             this.Model = model;
 
             this.Model.PropertyChanged -= this.Model_PropertyChanged;
-            foreach (var validation in Validations)
+            //for (int i = Validations.Count - 1; i >= 0; i--)
+            //{
+            //    var validation = Validations[i];
+            //    this.Model.SetColumnError(validation.Name, validation.Message);
+
+            //}
+            for (int i = 0; i < Validations.Count; i++)
             {
+                var validation = Validations[i];
                 this.Model.SetColumnError(validation.Name, validation.Message);
             }
+
             this.Model.PropertyChanged += this.Model_PropertyChanged;
 
         }
@@ -257,7 +296,6 @@ namespace Trinity
 
         public ModelConfiguration<T> SetValidation(string name, bool isRequired, string message, string regexName)
         {
-
             if (Validations == null)
                 Validations = new List<ModelValidation>();
 
@@ -266,15 +304,30 @@ namespace Trinity
             {
                 validation = new ModelValidation() { Name = name, IsRequired = isRequired, Message = message };
 
-                var expression = Expressions.FirstOrDefault(m => m.Name == regexName);
-                if (expression != null)
+                if (string.IsNullOrEmpty(regexName) == false)
                 {
-                    validation.RegExpression = expression.Expression;
-                    if (string.IsNullOrEmpty(validation.Message))
+                    RegularExpression expression = null;
+                    for (int i = 0; i < Expressions.Count; i++)
                     {
-                        validation.Message = expression.Message;
+                        var temp = Expressions[i];
+                        if (temp.Name == regexName)
+                        {
+                            expression = Expressions[i];
+                            break;
+                        }
+                    }
+
+
+                    if (expression != null)
+                    {
+                        validation.RegExpression = expression.Expression;
+                        if (string.IsNullOrEmpty(validation.Message))
+                        {
+                            validation.Message = expression.Message;
+                        }
                     }
                 }
+
                 Validations.Add(validation);
                 AddError(validation);
             }

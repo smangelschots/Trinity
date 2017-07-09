@@ -1,6 +1,6 @@
 namespace Trinity
 {
-    public enum ErrorType
+    public enum LogType
     {
         Information,
         Warning,

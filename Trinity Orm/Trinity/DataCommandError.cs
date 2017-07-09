@@ -10,7 +10,7 @@ namespace Trinity
         public string StackTrace { get; set; }
         public Exception Exception { get; set; }
 
-        public ErrorType ErrorType { get; set; }
+        public LogType ErrorType { get; set; }
 
         public string Message { get; set; }
     }

@@ -30,10 +30,11 @@ namespace Trinity
         public string[] QueryColumns { get; private set; }
         public List<DataError> CommandErrors { get; set; }
         public List<string> Messages { get; set; }
+        public IDbCommand DbCommand { get; set; }
 
         public string CommandText { get; set; }
 
-        public void AddError(ErrorType errorType, string message, Exception exception = null)
+        public void AddError(LogType errorType, string message, Exception exception = null)
         {
             this.CommandErrors.Add(new DataError()
                                    {
@@ -60,7 +61,7 @@ namespace Trinity
         public void AddMessage(string message)
         {
             this.Messages.Add(message);
-            LoggingService.SendToLog("SQLdatamanager", message, ErrorType.Information);
+            LoggingService.SendToLog("SQLdatamanager", message, LogType.Information);
         }
 
         public string Name { get; set; }

@@ -67,6 +67,7 @@
     <Compile Include="EditEventHandlerArgs.cs" />
     <Compile Include="ExpandoColumn.cs" />
     <Compile Include="GenericPropertyAccessor.cs" />
+    <Compile Include="HtmlLog.cs" />
     <Compile Include="IColumnAttribute.cs" />
     <Compile Include="IColumnMap.cs" />
     <Compile Include="ICommandResult.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="DataValidationCollection.cs" />
     <Compile Include="Dmq.cs" />
     <Compile Include="IDataCommand.cs" />
-    <Compile Include="ErrorType.cs" />
+    <Compile Include="LogType.cs" />
     <Compile Include="IModelCommand.cs" />
     <Compile Include="IModelConfiguration.cs" />
     <Compile Include="IModelConfigurationManager.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="IPrimaryKeyAttribute.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ITableNameAttribute.cs" />
+    <Compile Include="LoggingEventArgs.cs" />
     <Compile Include="LoggingService.cs" />
     <Compile Include="Lookupconfiguration.cs" />
     <Compile Include="ModelBase.cs" />

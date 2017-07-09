@@ -22,7 +22,7 @@ namespace Trinity
         public event EventHandler<ModelCommandValidationEventArgs<T>> SetValidation;
 
 
-        //TODO Implement Validation meke user of baseclass 
+        //TODO Implement Validation make user of baseclass 
         public void OnSetValidation(ModelCommandValidationEventArgs<T> e)
         {
             EventHandler<ModelCommandValidationEventArgs<T>> handler = this.SetValidation;
@@ -138,9 +138,8 @@ namespace Trinity
             {
                 var message =
                     $"Can't GetValue from property {name} try adding the [IgnoreAttribute] to the property {exception.Message} {exception.StackTrace}";
-                LoggingService.SendToLog("DataCommand", message, ErrorType.Error);
-                //TODO make this better
-              //  throw new NotImplementedException("Error in get value ", exception);
+                LoggingService.SendToLog("DataCommand", message, LogType.Error);
+                //  throw new NotImplementedException("Error in get value ", exception);
             }
             return DBNull.Value;
         }
@@ -335,14 +334,14 @@ namespace Trinity
 
 
 
-        public CommandExpression Convert<T>(Expression<Func<T, object>> expression)
+        public CommandExpression Convert<T1>(Expression<Func<T1, object>> expression)
         {
             if (expression.Body is UnaryExpression)
                 return Convert(expression, (UnaryExpression)expression.Body);
             throw new InvalidOperationException("Unable to convert expression to SQL");
         }
 
-        public string ConvertToString<T>(Expression<Func<T, object>> expression)
+        public string ConvertToString<T1>(Expression<Func<T1, object>> expression)
         {
             if (expression.Body is MemberExpression)
                 return Convert(expression, (MemberExpression)expression.Body);
@@ -358,7 +357,7 @@ namespace Trinity
         }
 
 
-        public object ConvertToObject<T>(Expression<Func<T, object>> expression)
+        public object ConvertToObject<T1>(Expression<Func<T1, object>> expression)
         {
             if (expression.Body is MemberExpression)
                 return ConvertToObject(expression, (MemberExpression)expression.Body);
@@ -371,7 +370,7 @@ namespace Trinity
 
             throw new InvalidOperationException("Unable to convert expression to SQL");
         }
-        public CommandExpression Convert<T>(Expression<Func<T, bool>> expression)
+        public CommandExpression Convert<T1>(Expression<Func<T1, bool>> expression)
         {
             if (expression.Body is BinaryExpression)
                 return Convert<T>((BinaryExpression)expression.Body);
@@ -379,7 +378,7 @@ namespace Trinity
             throw new InvalidOperationException("Unable to convert expression to SQL");
         }
 
-        private object ConvertToObject<T>(Expression<Func<T, object>> expression, MemberExpression body)
+        private object ConvertToObject<T1>(Expression<Func<T1, object>> expression, MemberExpression body)
         {
             // TODO: should really do something about conventions and overridden names here
             var member = body.Member;
@@ -389,14 +388,14 @@ namespace Trinity
                 return member.Name;
 
             var compiledExpression = expression.Compile();
-            var value = compiledExpression(default(T));
+            var value = compiledExpression(default(T1));
 
 
             return ConvertToObject(value);
         }
 
 
-        private string Convert<T>(Expression<Func<T, object>> expression, MemberExpression body)
+        private string Convert<T1>(Expression<Func<T1, object>> expression, MemberExpression body)
         {
             // TODO: should really do something about conventions and overridden names here
             var member = body.Member;
@@ -405,15 +404,15 @@ namespace Trinity
             if (member.DeclaringType.IsAssignableFrom(typeof(T)))
                 return member.Name;
 
-     
+
             var compiledExpression = expression.Compile();
-            var value = compiledExpression(default(T)); 
+            var value = compiledExpression(default(T1));
 
 
             return Convert(value);
         }
 
-        private object ConvertToObject<T>(Expression<Func<T, object>> expression, UnaryExpression body)
+        private object ConvertToObject<T1>(Expression<Func<T1, object>> expression, UnaryExpression body)
         {
             var constant = body.Operand as ConstantExpression;
 
@@ -440,7 +439,7 @@ namespace Trinity
         }
 
 
-        private string ConvertToString<T>(Expression<Func<T, object>> expression, UnaryExpression body)
+        private string ConvertToString<T1>(Expression<Func<T1, object>> expression, UnaryExpression body)
         {
             var constant = body.Operand as ConstantExpression;
 
@@ -496,7 +495,7 @@ namespace Trinity
         }
 
 
-        private CommandExpression Convert<T>(BinaryExpression expression)
+        private CommandExpression Convert<T1>(BinaryExpression expression)
         {
 
             //TODO make paramters values.
@@ -689,6 +688,42 @@ namespace Trinity
             return this;
         }
 
+        public virtual IDataCommand<T> WhereBetween<TField>(Expression<Func<T, TField>> field, object begin, object end)
+        {
+            string property = GetField(field);
+
+            var parameterBegin = $"{property.Replace(" ", "")}_Begin";
+            var parameterEnd = $"{property.Replace(" ", "")}_End";
+
+
+            this.WhereText = string.Format(" WHERE [{0}] BETWEEN {1} AND {2}", property,
+                $"@{parameterBegin}",
+                $"@{parameterEnd}");
+            SetParameter(parameterBegin, property, begin, true);
+            SetParameter(parameterEnd, property, end, true);
+
+            return this;
+
+        }
+
+        public virtual IDataCommand<T> WhereNotBetween<TField>(Expression<Func<T, TField>> field, object begin, object end)
+        {
+            string property = GetField(field);
+
+            var parameterBegin = $"{property.Replace(" ", "")}_Begin";
+            var parameterEnd = $"{property.Replace(" ", "")}_End";
+
+
+            this.WhereText = string.Format(" WHERE [{0}] NOT BETWEEN {1} AND {2}", property,
+                $"@{parameterBegin}",
+                $"@{parameterEnd}");
+            SetParameter(parameterBegin, property, begin, true);
+            SetParameter(parameterEnd, property, end, true);
+
+            return this;
+
+        }
+
         public virtual IDataCommand<T> And(string filterString)
         {
             this.WhereText += string.Format(" And {0}", filterString);
@@ -814,11 +849,11 @@ namespace Trinity
         }
 
         public IList<T> ExecuteToList()
-        { 
-          
-            var list = new List<T>();
+        {
 
-            var result =   this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
+            var list = new List<T>();
+            
+            var result = this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
             this.Manager.Remove(this);
             if (result != null)
             {
@@ -827,6 +862,9 @@ namespace Trinity
                     list = result.Data.ToList();
                 }
             }
+            Manager.Connection.Close();
+            Manager.Connection.Dispose();
+
 
             return list;
         }
@@ -860,7 +898,7 @@ namespace Trinity
                 }
             }
             callback.Invoke(list);
-                
+
         }
 
     }

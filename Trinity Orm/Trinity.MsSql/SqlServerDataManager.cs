@@ -34,6 +34,16 @@ namespace Trinity.MsSql
             TableMapFromDatabase = true;
         }
 
+
+        public override void CreateTransaction()
+        {
+            var conn = Connection as SqlConnection;
+
+
+            if (conn != null)
+                this.Transaction = conn.BeginTransaction(IsolationLevel.ReadCommitted);
+        }
+
         public IDataCommand<T> Track(T model)
         {
             var dataCommand = this.Update();
@@ -42,7 +52,7 @@ namespace Trinity.MsSql
             var errorInfo = model as IDataErrorInfo;
             if (errorInfo != null)
             {
-                dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> {ModelCommand = dataCommand});
+                dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> { ModelCommand = dataCommand });
             }
 
 
@@ -92,7 +102,7 @@ namespace Trinity.MsSql
             var errorInfo = model;
             if (errorInfo != null)
             {
-                dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> {ModelCommand = dataCommand});
+                dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> { ModelCommand = dataCommand });
             }
             return dataCommand;
         }
@@ -104,7 +114,7 @@ namespace Trinity.MsSql
             var errorInfo = model;
             if (errorInfo != null)
             {
-                dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> {ModelCommand = dataCommand});
+                dataCommand.OnSetValidation(new ModelCommandValidationEventArgs<T> { ModelCommand = dataCommand });
             }
             return dataCommand;
         }
@@ -136,7 +146,7 @@ namespace Trinity.MsSql
             }
             else
             {
-                result.AddError(ErrorType.Information, "No where in delete " + command.CommandText);
+                result.AddError(LogType.Information, "No where in delete " + command.CommandText);
             }
             result.DataCommand = dataCommand;
 
@@ -156,7 +166,7 @@ namespace Trinity.MsSql
                 if (item.Error == null)
                     if (item.HasErrors())
                     {
-                        result.AddError(ErrorType.Error, "Model has validation error");
+                        result.AddError(LogType.Error, "Model has validation error");
                         return result;
                     }
             }
@@ -189,13 +199,9 @@ namespace Trinity.MsSql
                         if (column == null)
                             column = dataCommand.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == change);
 
-
-                        if (column != null)
+                        if (column?.IsIdentity == false)
                         {
-                            if (column.IsIdentity == false)
-                            {
-                                dataCommand.Value(column.ColumnName, dataCommand.GetValue(change));
-                            }
+                            dataCommand.Value(column.ColumnName, dataCommand.GetValue(change));
                         }
                     }
                     else
@@ -214,7 +220,7 @@ namespace Trinity.MsSql
                         result.RecordsAffected = resultIndex;
                         if (resultIndex == 0)
                         {
-                            result.AddError(ErrorType.Information, "No rows affected");
+                            result.AddError(LogType.Information, "No rows affected");
                         }
                         else
                         {
@@ -223,7 +229,7 @@ namespace Trinity.MsSql
                     }
                     else
                     {
-                        result.AddError(ErrorType.Information, "No where in update");
+                        result.AddError(LogType.Information, "No where in update");
                     }
 
                     result.CommandText = command.CommandText;
@@ -247,15 +253,15 @@ namespace Trinity.MsSql
                 if (item.Errors != null)
                     if (item.HasErrors())
                     {
-                        result.AddError(ErrorType.Error, "Model has validation error");
+                        result.AddError(LogType.Error, "Model has validation error");
                         return result;
                     }
             }
             if (TableMapFromDatabase)
                 dataCommand.GetTableMap();
 
+
             var select = string.Empty;
-            var where = string.Empty;
             bool identity = false;
             var retunColums = new Dictionary<string, string>();
             dataCommand.AddChanges();
@@ -265,7 +271,6 @@ namespace Trinity.MsSql
 
                 if (column == null)
                     column = dataCommand.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == key);
-
 
                 if (column != null)
                 {
@@ -321,7 +326,7 @@ namespace Trinity.MsSql
                 result.RecordsAffected = dataReader.RecordsAffected;
                 if (dataReader.RecordsAffected == 0)
                 {
-                    result.AddError(ErrorType.Information, "No rows affected");
+                    result.AddError(LogType.Information, "No rows affected");
                 }
                 else
                 {
@@ -380,7 +385,7 @@ namespace Trinity.MsSql
                         result = new DataTabelCommandResult();
                         var dt = new DataTable(dataCommand.TabelName);
                         dt.Load(r);
-                        ((DataTabelCommandResult) result).Data = dt;
+                        ((DataTabelCommandResult)result).Data = dt;
 
                         return result;
                     }
@@ -390,7 +395,7 @@ namespace Trinity.MsSql
                     while (await r.ReadAsync())
                     {
                         bool userDataManager = false;
-                        var newObject = (T) Activator.CreateInstance(objectType);
+                        var newObject = (T)Activator.CreateInstance(objectType);
                         var dataManager = newObject as IObjectDataManager;
 
                         if (dataManager != null)
@@ -465,7 +470,7 @@ namespace Trinity.MsSql
                                 }
                                 catch (Exception ex)
                                 {
-                                    result.AddError(ErrorType.Error,
+                                    result.AddError(LogType.Error,
                                         string.Format("{1} {0} ", name, dataCommand.TabelName), ex);
                                 }
                             }
@@ -478,14 +483,14 @@ namespace Trinity.MsSql
             }
             catch (Exception exception)
             {
-                result.AddError(ErrorType.Error, dataCommand.TabelName + " " + typeof(T).FullName, exception);
+                result.AddError(LogType.Error, dataCommand.TabelName + " " + typeof(T).FullName, exception);
             }
 
-            ((ModelCommandResult<T>) result).Data = items;
+            ((ModelCommandResult<T>)result).Data = items;
             result.AddMessage(string.Format("{0} executed with {1} rows affected", dataCommand.SqlCommandText,
                 result.RecordsAffected));
             //TODO change class to use base type
-            dataCommand.OnCommandExecuted(new ModelCommandExecutedEventArgs<T> {Result = (ModelCommandResult<T>) result});
+            dataCommand.OnCommandExecuted(new ModelCommandExecutedEventArgs<T> { Result = (ModelCommandResult<T>)result });
             dataCommand.ResetCommand();
             result.DataCommand = dataCommand;
             return result;
@@ -519,7 +524,7 @@ namespace Trinity.MsSql
                         result = new DataTabelCommandResult();
                         var dt = new DataTable(dataCommand.TabelName);
                         dt.Load(r);
-                        ((DataTabelCommandResult) result).Data = dt;
+                        ((DataTabelCommandResult)result).Data = dt;
 
                         return result;
                     }
@@ -529,7 +534,7 @@ namespace Trinity.MsSql
                     while (r.Read())
                     {
                         bool userDataManager = false;
-                        var newObject = (T) Activator.CreateInstance(objectType);
+                        var newObject = (T)Activator.CreateInstance(objectType);
                         var dataManager = newObject as IObjectDataManager;
 
 
@@ -586,9 +591,8 @@ namespace Trinity.MsSql
                                                         }
                                                         catch (Exception)
                                                         {
-                                                            prop.SetValue(newObject,value.ConvertValue(prop), null);
+                                                            prop.SetValue(newObject, value.ConvertValue(prop), null);
                                                         }
-                                                      
                                                     }
                                                 }
                                             }
@@ -617,7 +621,7 @@ namespace Trinity.MsSql
                                 }
                                 catch (Exception ex)
                                 {
-                                    result.AddError(ErrorType.Error, string.Format("{1} {0} ", name, dataCommand.TabelName), ex);
+                                    result.AddError(LogType.Error, string.Format("{1} {0} ", name, dataCommand.TabelName), ex);
                                 }
                             }
                         }
@@ -629,7 +633,7 @@ namespace Trinity.MsSql
             }
             catch (Exception exception)
             {
-                result.AddError(ErrorType.Error, dataCommand.TabelName + " " + typeof(T).FullName, exception);
+                result.AddError(LogType.Error, $"{dataCommand.TabelName} {dataCommand.SqlCommandText} {dataCommand.Connection.ConnectionString} {typeof(T).FullName}", exception);
             }
 
             ((ModelCommandResult<T>)result).Data = items;
@@ -641,7 +645,7 @@ namespace Trinity.MsSql
             return result;
         }
 
-      
+
 
 
         private void TrySetValue(IDataCommand dataCommand, object newObject, Type objectType, string name, object value)

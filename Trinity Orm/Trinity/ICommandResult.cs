@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Trinity
 {
@@ -11,8 +12,9 @@ namespace Trinity
         bool HasErrors { get; }
         DataCommandType CommandType { get; set; }
         List<DataError> CommandErrors { get; set; }
-        void AddError(ErrorType errorType, string message, Exception exception = null);
+        void AddError(LogType errorType, string message, Exception exception = null);
         List<string> Messages { get; set; }
+        IDbCommand DbCommand { get; set; }
         void AddMessage(string message);
 
 

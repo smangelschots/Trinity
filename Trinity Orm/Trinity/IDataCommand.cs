@@ -62,6 +62,8 @@ namespace Trinity
 
         IDataCommand<T> From(string tableName = "");
 
+        IDataCommand<T> WhereBetween<TField>(Expression<Func<T, TField>> field, object begin, object end);
+        IDataCommand<T> WhereNotBetween<TField>(Expression<Func<T, TField>> field, object begin, object end);
 
         IDataCommand<T> OrderBy(string column);
 

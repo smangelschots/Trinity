@@ -129,6 +129,9 @@ namespace Trinity.MsSql
 
                     using (var conn = new SqlConnection(Manager.ConnectionString))
                     {
+
+
+
                         conn.Open();
                         using (var command = new SqlCommand(sqlTableMap, conn))
                         {
@@ -425,12 +428,15 @@ namespace Trinity.MsSql
 
                         var col = column as SqlColumnMap;
 
-                        sqlparameter.DbType = col.DbType;
-                        sqlparameter.Size = col.Size;
-                        sqlparameter.IsNullable = col.IsNullable;
-                        sqlparameter.Size = col.Size;
-                        sqlparameter.IsForeinKey = col.IsForeinKey;
-                        sqlparameter.IsPrimaryKey = col.IsPrimaryKey;
+                        if (col != null)
+                        {
+                            sqlparameter.DbType = col.DbType;
+                            sqlparameter.Size = col.Size;
+                            sqlparameter.IsNullable = col.IsNullable;
+                            sqlparameter.Size = col.Size;
+                            sqlparameter.IsForeinKey = col.IsForeinKey;
+                            sqlparameter.IsPrimaryKey = col.IsPrimaryKey;
+                        }
                     }
                 }
                 if (sqlparameter.DbType != SqlDbType.Timestamp)
@@ -492,7 +498,7 @@ namespace Trinity.MsSql
                             case SqlDbType.Real:
                                 break;
                             case SqlDbType.UniqueIdentifier:
-                                if (value.GetType() == typeof(string))
+                                if (value is string)
                                 {
                                     value = new Guid(value.ToStringValue());
                                 }

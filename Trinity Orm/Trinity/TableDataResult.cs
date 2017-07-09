@@ -17,13 +17,14 @@ namespace Trinity
 
         public List<DataError> CommandErrors { get; set; }
 
-        public void AddError(ErrorType errorType, string message, Exception exception = null)
+        public void AddError(LogType errorType, string message, Exception exception = null)
         {
 
             //TODO implement error management 
         }
 
         public List<string> Messages { get; set; }
+        public IDbCommand DbCommand { get; set; }
 
         public void AddMessage(string message)
         {

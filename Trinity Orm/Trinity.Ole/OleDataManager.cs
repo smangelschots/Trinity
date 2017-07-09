@@ -87,7 +87,7 @@ namespace Trinity.Ole
                     result.RecordsAffected = resultIndex;
                     if (resultIndex == 0)
                     {
-                        result.AddError(ErrorType.Information, "No rows affected");
+                        result.AddError(LogType.Information, "No rows affected");
                     }
                     else
                     {
@@ -96,7 +96,7 @@ namespace Trinity.Ole
                 }
                 else
                 {
-                    result.AddError(ErrorType.Information, "No where in update");
+                    result.AddError(LogType.Information, "No where in update");
                 }
                 result.AddMessage(string.Format("{0} executed with {1} rows affected", dataCommand.SqlCommandText, result.RecordsAffected));
             }
@@ -172,7 +172,7 @@ namespace Trinity.Ole
                 result.RecordsAffected = dataReader.RecordsAffected;
                 if (dataReader.RecordsAffected == 0)
                 {
-                    result.AddError(ErrorType.Information, "No rows affected");
+                    result.AddError(LogType.Information, "No rows affected");
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace Trinity.Ole
             }
             catch (Exception exception)
             {
-                result.AddError(ErrorType.Error, "No rows affected", exception);
+                result.AddError(LogType.Error, "No rows affected", exception);
             }
 
             result.Data = items;

@@ -30,7 +30,7 @@ namespace Trinity
                         {
                             if (objectValue != DBNull.Value)
                             {
-                                return (T)objectValue;
+                                return (T) objectValue;
                             }
                         }
                         catch (Exception exception)
@@ -41,12 +41,14 @@ namespace Trinity
 
                 if (fieldFound == false)
                 {
-                    LoggingService.SendToLog("TryGetDataValue", string.Format("Cant find field {0} ", name), ErrorType.Error);
+                    LoggingService.SendToLog("TryGetDataValue", string.Format("Cant find field {0} ", name),
+                        LogType.Error);
                 }
             }
             catch (Exception exception)
             {
-                LoggingService.SendToLog("TryGetDataValue cant convert", name + " " + exception.Message + " " + exception.StackTrace, ErrorType.Error);
+                LoggingService.SendToLog("TryGetDataValue cant convert",
+                    name + " " + exception.Message + " " + exception.StackTrace, LogType.Error);
             }
             return default(T);
         }
@@ -91,7 +93,8 @@ namespace Trinity
                 case SqlDbType.SmallDateTime:
                     return OleDbType.DBDate;
                 case SqlDbType.SmallInt:
-                    return OleDbType.SmallInt; ;
+                    return OleDbType.SmallInt;
+                    ;
                 case SqlDbType.SmallMoney:
                     return OleDbType.Currency;
                 case SqlDbType.Text:
@@ -170,6 +173,7 @@ namespace Trinity
         {
             return ToInt(value);
         }
+
         public static string ToString(object value)
         {
             if (value == null || value == DBNull.Value)
@@ -214,7 +218,7 @@ namespace Trinity
 
         public static bool IsFileLocked(this FileInfo file)
         {
-            FileStream fileStream = (FileStream)null;
+            FileStream fileStream = (FileStream) null;
             try
             {
                 if (!file.IsReadOnly)
@@ -246,6 +250,7 @@ namespace Trinity
         {
             return ToStringValue(value);
         }
+
         public static string ToStringFixedLength(this object value)
         {
             return ToStringValue(value);
@@ -253,7 +258,7 @@ namespace Trinity
 
         public static XmlDocument ToXml(this object value)
         {
-            return (XmlDocument)value;
+            return (XmlDocument) value;
         }
 
         public static DateTime? ToDateTimeNullable(this object value)
@@ -262,7 +267,7 @@ namespace Trinity
             try
             {
                 DateTime myD = DateTime.Parse(value.ToString(), CultureInfo.CurrentCulture,
-                              DateTimeStyles.AssumeLocal);
+                    DateTimeStyles.AssumeLocal);
                 return myD;
 
             }
@@ -302,33 +307,65 @@ namespace Trinity
 
         public static DateTime ToDateTime(this object value)
         {
-            if (value == null || value == DBNull.Value) return
-
-                new DateTime(1753, 1, 1);
+            if (value == null || value == DBNull.Value)
+                return
+                    new DateTime(1753, 1, 1);
 
 
             DateTime myD = new DateTime(1753, 1, 1);
             try
             {
-                myD = DateTime.Parse(value.ToString(), CultureInfo.CurrentCulture,
-                                           DateTimeStyles.AssumeLocal);
+                myD = DateTime.Parse(value.ToStringValue(), CultureInfo.CurrentCulture,
+                    DateTimeStyles.AssumeLocal);
 
             }
             catch (Exception)
             {
                 try
                 {
-                    myD = DateTime.ParseExact(value.ToString(), CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.CurrentCulture);
+                    myD = DateTime.ParseExact(value.ToStringValue(),
+                        CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.CurrentCulture);
                 }
                 catch (Exception)
                 {
-
+                    try
+                    {
+                        myD = ConvertStringToDateTime(value.ToStringValue());
+                    }
+                    catch (Exception)
+                    {
+                        myD = new DateTime(1753, 1, 1);
+                    }
                 }
             }
-
-
             return myD;
         }
+
+
+        private static DateTime ConvertStringToDateTime(string datetime)
+        {
+            string[] strDate = datetime.Split('T');
+            string date = strDate[0];
+            string time = strDate[1].Substring(0, strDate[1].LastIndexOf('+'));
+            int year;
+            int month;
+            int day;
+            int hour;
+            int min;
+            int sec;
+
+            int.TryParse(date.Substring(0, 4), out year);
+            int.TryParse(date.Substring(4, 2), out month);
+            int.TryParse(date.Substring(6, 2), out day);
+
+            int.TryParse(time.Substring(0, 2), out hour);
+            int.TryParse(time.Substring(2, 2), out min);
+            int.TryParse(time.Substring(4, 2), out sec);
+
+            DateTime dtmDateTime = new DateTime(year, month, day, hour, min, sec, System.Globalization.Calendar.CurrentEra);
+            return dtmDateTime;
+        }
+
 
         public static DateTime? ToDateTimeNull(this object value, int addDays)
         {
@@ -536,15 +573,15 @@ namespace Trinity
 
         }
 
-        public static T BaseConvert<T>(this object Source)
+        public static T BaseConvert<T>(this object source)
         {
-            var result = Source;
+            var result = source;
             Type DestType = typeof(T);
 
-            if ((!(Source.GetType() == DestType)) && (DestType != typeof(object)))
+            if ((!(source.GetType() == DestType)) && (DestType != typeof(object)))
             {
                 var converter = TypeDescriptor.GetConverter(DestType);
-                result = converter.ConvertFrom(Source);
+                result = converter.ConvertFrom(source);
             }
             return (T)result;
         }

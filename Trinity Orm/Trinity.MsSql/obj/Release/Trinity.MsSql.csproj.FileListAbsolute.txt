@@ -5,3 +5,10 @@ I:\Projects\Trinity\Trinity.MsSql\bin\Release\Trinity.pdb
 I:\Projects\Trinity\Trinity.MsSql\obj\Release\Trinity.MsSql.csprojResolveAssemblyReference.cache
 I:\Projects\Trinity\Trinity.MsSql\obj\Release\Trinity.MsSql.dll
 I:\Projects\Trinity\Trinity.MsSql\obj\Release\Trinity.MsSql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Release\Trinity.MsSql.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Release\Trinity.MsSql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Release\Trinity.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Release\Trinity.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Release\Trinity.MsSql.csprojResolveAssemblyReference.cache
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Release\Trinity.MsSql.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Release\Trinity.MsSql.pdb

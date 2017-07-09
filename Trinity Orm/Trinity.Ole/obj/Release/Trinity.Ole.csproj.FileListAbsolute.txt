@@ -5,3 +5,10 @@ I:\Projects\Trinity\Trinity.Ole\bin\Release\Trinity.pdb
 I:\Projects\Trinity\Trinity.Ole\obj\Release\Trinity.Ole.csprojResolveAssemblyReference.cache
 I:\Projects\Trinity\Trinity.Ole\obj\Release\Trinity.Ole.dll
 I:\Projects\Trinity\Trinity.Ole\obj\Release\Trinity.Ole.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Release\Trinity.Ole.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Release\Trinity.Ole.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Release\Trinity.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Release\Trinity.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Release\Trinity.Ole.csprojResolveAssemblyReference.cache
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Release\Trinity.Ole.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Release\Trinity.Ole.pdb

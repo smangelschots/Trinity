@@ -13,7 +13,7 @@ namespace Trinity
 
     public abstract class BaseDataManager<T> : IDataManager<T> where T : IDataCommand
     {
-        private readonly DbProviderFactory _factory;
+        private DbProviderFactory _factory;
 
         public event EventHandler<ModelCommandPropertyChangedEventArgs> Validating;
 
@@ -22,7 +22,7 @@ namespace Trinity
         public Dictionary<string, TableMap> TableMaps { get; set; }
 
         private DbConnection _connection;
-        private DbTransaction Transaction { get; set; }
+        public DbTransaction Transaction { get; set; }
         private List<DataError> Errors { get; set; }
 
         protected List<IDataCommand> Commands { get; set; }
@@ -41,6 +41,7 @@ namespace Trinity
         }
 
         public string ConnectionString { get; set; }
+        public string ProviderName { get; }
 
         protected void OnException(Exception x)
         {
@@ -50,6 +51,7 @@ namespace Trinity
         protected BaseDataManager(string connectionString, string providerName) : this()
         {
             this.ConnectionString = connectionString;
+            ProviderName = providerName;
             this._factory = DbProviderFactories.GetFactory(providerName);
         }
 
@@ -78,29 +80,65 @@ namespace Trinity
 
         private void OpenSharedConnection()
         {
-            if (this._connection == null)
+
+            try
             {
-                this._connection = this._factory.CreateConnection();
-            }
-            if (this._connection != null)
-            {
-                if (this._connection.State == ConnectionState.Closed)
+                if (this._connection == null)
                 {
-                    this._connection.ConnectionString = this.ConnectionString;
-                    this._connection.Open();
+                    if (_factory == null)
+                    {
+                        this._factory = DbProviderFactories.GetFactory(ProviderName);
+                    }
+                    this._connection = this._factory.CreateConnection();
                 }
+                if (this._connection != null)
+                {
+
+                    switch (this._connection.State)
+                    {
+                        case ConnectionState.Closed:
+                            this._connection.ConnectionString = this.ConnectionString;
+                            this._connection.Open();
+                            break;
+                        case ConnectionState.Open:
+
+                            break;
+                        case ConnectionState.Connecting:
+                            break;
+                        case ConnectionState.Executing:
+                            break;
+                        case ConnectionState.Fetching:
+                            break;
+                        case ConnectionState.Broken:
+
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+
             }
+            catch (Exception e)
+            {
+                LoggingService.SendErrorToLog(e);
+            }
+
         }
 
         //TODO Implement transaction
-        protected void CreateTransaction()
+        public virtual void CreateTransaction()
         {
-            if (this.Connection.State != ConnectionState.Open)
-                this.Connection.Open();
+
+            this.OpenSharedConnection();
+
+            if (this.Connection != null)
+                if (this.Connection.State != ConnectionState.Open)
+                    this.Connection.Open();
 
             if (this.Transaction == null)
             {
                 this.Transaction = this._connection.BeginTransaction();
+
             }
         }
 
@@ -178,10 +216,12 @@ namespace Trinity
             var deletes = this.Commands.Where(m => m.CommandType == DataCommandType.Delete).ToArray();
             this.OnBeforeDelete(deletes);
             var restult = this.ExecuteCommands(deletes);
-            for (int i = deletes.Count() - 1; i >= 0; i--)
-            {
-                this.Commands.Remove(deletes[i]);
-            }
+
+            if (Transaction == null)
+                for (int i = deletes.Count() - 1; i >= 0; i--)
+                {
+                    this.Commands.Remove(deletes[i]);
+                }
             return restult;
         }
         private IEnumerable<ICommandResult> SelectCommands()
@@ -228,51 +268,64 @@ namespace Trinity
             //TODO implement event handler
         }
 
+
+
+
         public ICommandResult ExecuteCommand(IDataCommand dataCommand)
         {
             ICommandResult result = new CommandResult();
-
-
             var timer = new Stopwatch();
             timer.Start();
 
             try
             {
-                if (dataCommand.Validate() == false) return null;
-
-
-                this.OpenSharedConnection();
                 try
                 {
-                    using (var command = this.Connection.CreateCommand())
-                    {
-                        command.Connection = this.Connection;
-                        if (this.Transaction != null) command.Transaction = this.Transaction;
-                        switch (dataCommand.CommandType)
-                        {
-                            case DataCommandType.Select:
-                                result = this.ExecuteSelectCommand((T)dataCommand, command);
-                                break;
-                            case DataCommandType.Insert:
-                                result = ExecuteInsertCommand((T)dataCommand, command);
-                                break;
-                            case DataCommandType.Update:
-                                result = ExecuteUpdateCommand((T)dataCommand, command);
-                                break;
-                            case DataCommandType.Delete:
-                                result = ExecuteDeleteCommand((T)dataCommand, command);
-                                break;
-                        }
-                    }
+                    if (dataCommand.Validate() == false) return null;
                 }
-                catch (SqlException exception)
+                catch (Exception exception)
                 {
-                    result.AddError(ErrorType.Error, "Sql exeption", exception);
+                    result.AddError(LogType.Error, "Validate exeption", exception);
                 }
-                catch (Exception ex)
+                if (Connection == null)
+                    this.OpenSharedConnection();
+                //try
+                //{
+
+                var command = this.Connection.CreateCommand();
+
+                command.CommandTimeout = 0;
+                command.Connection = this.Connection;
+                if (this.Transaction != null)
                 {
-                    result.AddError(ErrorType.Error, "exeption", ex);
+                    command.Transaction = this.Transaction;
                 }
+                switch (dataCommand.CommandType)
+                {
+                    case DataCommandType.Select:
+                        result = this.ExecuteSelectCommand((T)dataCommand, command);
+                        break;
+                    case DataCommandType.Insert:
+                        result = ExecuteInsertCommand((T)dataCommand, command);
+                        break;
+                    case DataCommandType.Update:
+                        result = ExecuteUpdateCommand((T)dataCommand, command);
+                        break;
+                    case DataCommandType.Delete:
+                        result = ExecuteDeleteCommand((T)dataCommand, command);
+                        break;
+                }
+                result.DbCommand = command;
+
+                //}
+                //catch (SqlException exception)
+                //{
+                //    result.AddError(LogType.Error, "Sql exeption", exception);
+                //}
+                //catch (Exception ex)
+                //{
+                //    result.AddError(LogType.Error, "exeption", ex);
+                //}
             }
             catch (Exception ex1)
             {
@@ -288,13 +341,10 @@ namespace Trinity
                 if (this.Transaction == null)
                     this.Connection.Close();
 
-
                 timer.Stop();
                 result.AddMessage($"Executed {dataCommand.CommandType} in {timer.ElapsedMilliseconds}ms with {result.RecordsAffected} rows affected");
 
             }
-
-
             return result;
         }
         private IEnumerable<ICommandResult> ExecuteCommands(IDataCommand[] commandsList)
@@ -305,16 +355,36 @@ namespace Trinity
             try
             {
                 this.OpenSharedConnection();
-                // this.CreateTransaction();
-                results.AddRange(commandsList.Select(this.ExecuteCommand));
+
+                this.CreateTransaction();
+                foreach (var dataCommand in commandsList)
+                {
+                    var result = this.ExecuteCommand(dataCommand);
+                    results.Add(result);
+                }
                 try
                 {
-                    //   this.Transaction.Commit();
+                    this.Transaction.Commit();
                 }
                 catch (Exception exception)
                 {
                     this.Errors.Add(item: new DataError { Exception = exception, HasError = true });
                     this.Transaction.Rollback();
+                }
+                finally
+                {
+                    if (results != null)
+
+                        for (int i = results.Count - 1; i >= 0; i--)
+                        {
+                            if (results[i].DataCommand != null)
+                                results[i].DbCommand.Dispose();
+                        }
+
+
+
+                    if (Transaction != null)
+                        this.Transaction.Dispose();
                 }
             }
             catch (Exception ex1)
@@ -361,11 +431,11 @@ namespace Trinity
                 }
                 catch (SqlException exception)
                 {
-                    result.AddError(ErrorType.Error, "Sql exeption", exception);
+                    result.AddError(LogType.Error, "Sql exeption", exception);
                 }
                 catch (Exception ex)
                 {
-                    result.AddError(ErrorType.Error, "exeption", ex);
+                    result.AddError(LogType.Error, "exeption", ex);
                 }
             }
             catch (Exception ex1)

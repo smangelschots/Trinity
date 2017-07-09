@@ -33,15 +33,40 @@ namespace Trinity
                 foreach (DataError error in dataResult.CommandErrors)
                 {
                     if (error.Exception != null)
-                        result += string.Format("{0} {1} {2} {3}", error.ErrorType.ToEnumValue<ErrorType>(string.Empty), error.Message, error.Exception.Message, Environment.NewLine);
+                        result += string.Format("{0} {1} {2} {3}", error.ErrorType.ToEnumValue<LogType>(string.Empty), error.Message, error.Exception.Message, Environment.NewLine);
                     else
                     {
-                        result += string.Format("{0} {1} {2}", error.ErrorType.ToEnumValue<ErrorType>(string.Empty), error.Message, Environment.NewLine);
+                        result += string.Format("{0} {1} {2}", error.ErrorType.ToEnumValue<LogType>(string.Empty), error.Message, Environment.NewLine);
                     }
                 }
             }
             return result;
         }
+
+
+        private string GetInformation()
+        {
+            var temString = string.Empty;
+            var infos = this.Where(m => m.HasErrors == false);
+
+
+            string result = temString;
+            int rows = 0;
+            foreach (ICommandResult dataResult in infos)
+            {
+                rows +=  dataResult.RecordsAffected;
+               
+                foreach (var message in dataResult.Messages)
+                {
+                    result += string.Format($"{message} {Environment.NewLine}");
+                }
+
+            }
+            result += $"**** totaal rows {rows} *****";
+
+            return result;
+        }
+
 
 
 
@@ -100,7 +125,7 @@ namespace Trinity
 
             result.CommandErrors.Add(new DataError()
             {
-                ErrorType = ErrorType.Error,
+                ErrorType = LogType.Error,
                 HasError = true,
                 Message = message
             });
@@ -117,7 +142,7 @@ namespace Trinity
 
             result.CommandErrors.Add(new DataError()
             {
-                ErrorType = ErrorType.Information,
+                ErrorType = LogType.Information,
                 HasError = true,
                 Message = message
             });
@@ -133,7 +158,7 @@ namespace Trinity
 
             result.CommandErrors.Add(new DataError()
             {
-                ErrorType = ErrorType.Warning,
+                ErrorType = LogType.Warning,
                 HasError = true,
                 Message = message
             });
@@ -148,6 +173,11 @@ namespace Trinity
         {
             SentCommandResultMessage?.Invoke(this, args);
 
+        }
+
+        public override string ToString()
+        {
+            return GetInformation();
         }
     }
 
