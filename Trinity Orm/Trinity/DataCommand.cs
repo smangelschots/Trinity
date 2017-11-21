@@ -852,7 +852,6 @@ namespace Trinity
         {
 
             var list = new List<T>();
-            
             var result = this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
             this.Manager.Remove(this);
             if (result != null)
@@ -864,7 +863,6 @@ namespace Trinity
             }
             Manager.Connection.Close();
             Manager.Connection.Dispose();
-
 
             return list;
         }

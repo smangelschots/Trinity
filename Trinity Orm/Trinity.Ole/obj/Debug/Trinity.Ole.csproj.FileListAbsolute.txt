@@ -9,6 +9,6 @@ I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.dll
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.pdb
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.dll
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csprojResolveAssemblyReference.cache
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.dll
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csprojResolveAssemblyReference.cache

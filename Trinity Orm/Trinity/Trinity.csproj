@@ -54,6 +54,7 @@
     <Compile Include="AfterSaveEventArgs.cs" />
     <Compile Include="AutoJoinAttribute.cs" />
     <Compile Include="BaseDataContext.cs" />
+    <Compile Include="CachingService.cs" />
     <Compile Include="ColumnMap.cs" />
     <Compile Include="CommandResult.cs" />
     <Compile Include="BaseDataManager.cs" />

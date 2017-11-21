@@ -1,4 +1,6 @@
-﻿namespace Trinity
+﻿using System.Collections.Generic;
+
+namespace Trinity
 {
     public class DataBindingList<T> : DataCommandCollection<T> 
         where T : class

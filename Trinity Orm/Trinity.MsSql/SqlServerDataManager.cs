@@ -508,13 +508,12 @@ namespace Trinity.MsSql
             command.CommandText = dataCommand.SqlCommandText;
             var items = new List<T>();
             ICommandResult result = null;
-
             try
             {
                 int rowsIndex = 0;
                 using (SqlDataReader r = command.ExecuteReader() as SqlDataReader)
                 {
-
+                 
                     this.OnExecutedCommand(command);
                     Type objectType = typeof(T);
 
@@ -636,10 +635,16 @@ namespace Trinity.MsSql
                 result.AddError(LogType.Error, $"{dataCommand.TabelName} {dataCommand.SqlCommandText} {dataCommand.Connection.ConnectionString} {typeof(T).FullName}", exception);
             }
 
-            ((ModelCommandResult<T>)result).Data = items;
+
+
+
+                ((ModelCommandResult<T>)result).Data = items;
             result.AddMessage(string.Format("{0} executed with {1} rows affected", dataCommand.SqlCommandText, result.RecordsAffected));
             //TODO change class to use base type
+
+
             dataCommand.OnCommandExecuted(new ModelCommandExecutedEventArgs<T> { Result = (ModelCommandResult<T>)result });
+
             dataCommand.ResetCommand();
             result.DataCommand = dataCommand;
             return result;
