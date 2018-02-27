@@ -13,18 +13,6 @@
 
         public void GetTableMaps()
         {
-
-            //var manager = new BaseDataManager(_connectionsString, _providerName);
-            //var sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES where TABLE_TYPE = 'BASE TABLE'";
-
-            //using (var conn = new MySqlConnection(manager.ConnectionString))
-            //{
-            //    conn.Open();
-
-
-            //}
-
-
         }
     }
 }

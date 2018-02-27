@@ -15,3 +15,20 @@ I:\Projects\Trinity\Trinity.Test\obj\Debug\Trinity.Test.pdb
 I:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.Ole.dll
 I:\Projects\Trinity\Trinity.Test\bin\Debug\Trinity.Ole.pdb
 I:\Projects\Trinity\Trinity.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.Test.dll.config
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.Test.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.Test.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\MySql.Data.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.MsSql.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.MySql.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.Ole.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\FastMember.Signed.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.MsSql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.MySql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.Ole.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\bin\Debug\Trinity.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\obj\Debug\Trinity.Test.csprojResolveAssemblyReference.cache
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\obj\Debug\Trinity.Test.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.Test\obj\Debug\Trinity.Test.pdb

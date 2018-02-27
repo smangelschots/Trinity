@@ -7,3 +7,12 @@ I:\Projects\Trinity\Trinity.MySql\bin\Debug\Trinity.pdb
 I:\Projects\Trinity\Trinity.MySql\obj\Debug\Trinity.MySql.csprojResolveAssemblyReference.cache
 I:\Projects\Trinity\Trinity.MySql\obj\Debug\Trinity.MySql.dll
 I:\Projects\Trinity\Trinity.MySql\obj\Debug\Trinity.MySql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\obj\Debug\Trinity.MySql.csprojResolveAssemblyReference.cache
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\obj\Debug\Trinity.MySql.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\obj\Debug\Trinity.MySql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\bin\Debug\Trinity.MySql.dll.config
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\bin\Debug\Trinity.MySql.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\bin\Debug\Trinity.MySql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\bin\Debug\MySql.Data.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\bin\Debug\Trinity.dll
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MySql\bin\Debug\Trinity.pdb

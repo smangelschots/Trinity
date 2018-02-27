@@ -127,11 +127,6 @@ namespace Trinity.MsSql
             if (TableMapFromDatabase)
                 dataCommand.GetTableMap();
 
-            //TODO change the where has to be set to parameters before execute
-            //if (string.IsNullOrEmpty(dataCommand.WhereText) == false)
-            //    if (dataCommand.WhereText.Contains("@"))
-            //        dataCommand.BuildKeys();
-
             dataCommand.BuildSqlParameters(command);
             dataCommand.BuildSqlCommand();
             command.CommandText = dataCommand.SqlCommandText;
