@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Trinity.MsSql
 {
@@ -47,7 +48,8 @@ namespace Trinity.MsSql
 
                     newDataParameter.ColumnName = column;
                     newDataParameter.IsSelectParameter = isSelectParameter;
-                    this.Columns.Add(column);
+
+                    Column(column);
                     this.Parameters.Add(newDataParameter);
                 }
                 ;
@@ -361,6 +363,35 @@ namespace Trinity.MsSql
             return this;
         }
 
+        public override IDataCommand<T> Or(string column, string opperator, object value)
+        {
+            string columnText = column;
+
+            var columnObject = GetColumn(columnText);
+            if (columnObject != null)
+            {
+                columnText = columnObject.ColumnName;
+            }
+
+
+            return base.Or(columnText, opperator, value);
+        }
+
+        public override IDataCommand<T> And(string column, string opperator, object value)
+        {
+            string columnText = column;
+
+            var columnObject = GetColumn(columnText);
+            if (columnObject != null)
+            {
+                columnText = columnObject.ColumnName;
+            }
+
+
+            return base.And(columnText, opperator, value);
+        }
+
+
         public override IDataCommand<T> Where(string column, string opperator, object value)
         {
 
@@ -396,6 +427,42 @@ namespace Trinity.MsSql
             return null;
         }
 
+        public IDataCommand<T> FromWhereColumnsMap2Model(string tableName = "",  bool onlymapped = true)
+        {
+
+            this.From(tableName);
+            
+            //TODO test
+            GetTableMap();
+
+
+
+            var columns = GetColumnAttributes();
+            foreach (var columnMap in columns)
+            {
+                bool addColumn = true;
+
+
+
+                if (onlymapped)
+                {
+                    if (this.TableMap == null)
+                        addColumn = false;
+
+                    var column = this.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == columnMap.ColumnName);
+                    if (column == null)
+                        addColumn = false;
+                }
+
+                if (addColumn)
+                    Column(  columnMap.ColumnName);
+            }
+
+            this.SelectAll = false;
+            return this;
+
+        }
+
 
         protected internal void BuildSqlParameters(IDbCommand command)
         {
@@ -418,7 +485,8 @@ namespace Trinity.MsSql
                         column = this.TableMap.ColumnMaps.FirstOrDefault(m => m.PropertyName == columnText);
                         if (column == null)
                         {
-                            //TODO column name from property atribute  
+
+                        
                         }
 
                     }

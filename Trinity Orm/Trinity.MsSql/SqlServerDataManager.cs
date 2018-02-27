@@ -4,8 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using FastMember;
 
 namespace Trinity.MsSql
 {
@@ -242,6 +244,8 @@ namespace Trinity.MsSql
             return result;
 
         }
+
+
 
         protected override ICommandResult ExecuteInsertCommand(SqlModelCommand<T> dataCommand, IDbCommand command)
         {
@@ -497,11 +501,34 @@ namespace Trinity.MsSql
         }
 
 
+
         protected override ICommandResult ExecuteSelectCommand(SqlModelCommand<T> dataCommand, IDbCommand command)
         {
 
             if (TableMapFromDatabase)
-                dataCommand.GetTableMap();
+            {
+                var map = dataCommand.GetTableMap();
+                if (!string.IsNullOrEmpty(map))
+                {
+                    var columns = dataCommand.GetColumnAttributes();
+                    foreach (var columnMap in columns)
+                    {
+                        bool addColumn = true;
+                        if (dataCommand.TableMap == null)
+                            addColumn = false;
+
+                        var column = dataCommand.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == columnMap.ColumnName);
+                        if (column == null)
+                            addColumn = false;
+
+
+                        if (addColumn)
+                            dataCommand.Column(columnMap.ColumnName);
+                    }
+                    dataCommand.SelectAll = false;
+                }
+            }
+
 
             dataCommand.BuildSqlCommand();
             dataCommand.BuildSqlParameters(command);
@@ -513,7 +540,7 @@ namespace Trinity.MsSql
                 int rowsIndex = 0;
                 using (SqlDataReader r = command.ExecuteReader() as SqlDataReader)
                 {
-                 
+
                     this.OnExecutedCommand(command);
                     Type objectType = typeof(T);
 
@@ -530,10 +557,22 @@ namespace Trinity.MsSql
                     result = new ModelCommandResult<T>();
 
                     var tablename = dataCommand.GetTableAttribute();
+
+                    var accessor = TypeAccessor.Create(objectType);
+
+                    ConstructorInfo ctor = objectType.GetConstructor(Type.EmptyTypes);
+                    TrinityActivator.ObjectActivator<T> createdActivator = TrinityActivator.GetActivator<T>(ctor);
+
+                  
+
                     while (r.Read())
                     {
                         bool userDataManager = false;
-                        var newObject = (T)Activator.CreateInstance(objectType);
+
+                        //https://vagifabilov.wordpress.com/2010/04/02/dont-use-activator-createinstance-or-constructorinfo-invoke-use-compiled-lambda-expressions/
+
+                        var newObject = createdActivator();
+                        //var newObject = (T)Activator.CreateInstance(objectType);
                         var dataManager = newObject as IObjectDataManager;
 
 
@@ -579,31 +618,56 @@ namespace Trinity.MsSql
                                         {
                                             if (!string.IsNullOrEmpty(column.PropertyName))
                                             {
-                                                var prop = objectType.GetProperty(column.PropertyName);
-                                                if (prop != null)
+                                                try
+                                                {
+
+
+                                                    if (value != DBNull.Value)
+                                                        accessor[newObject, column.PropertyName] = value;
+                                                }
+                                                catch (Exception e)
                                                 {
                                                     if (value != DBNull.Value)
                                                     {
-                                                        try
-                                                        {
-                                                            prop.SetValue(newObject, value, null);
-                                                        }
-                                                        catch (Exception)
-                                                        {
-                                                            prop.SetValue(newObject, value.ConvertValue(prop), null);
-                                                        }
+                                                        var prop = objectType.GetProperty(column.PropertyName);
+                                                        accessor[newObject, column.PropertyName] = value.ConvertValue(prop);
+
                                                     }
+
                                                 }
+
+
+                                                //var prop = objectType.GetProperty(column.PropertyName);
+                                                //if (prop != null)
+                                                //{
+                                                //    if (value != DBNull.Value)
+                                                //    {
+                                                //        try
+                                                //        {
+                                                //            prop.SetValue(newObject, value, null);
+                                                //        }
+                                                //        catch (Exception)
+                                                //        {
+                                                //            prop.SetValue(newObject, value.ConvertValue(prop), null);
+                                                //        }
+                                                //    }
+                                                //}
                                             }
                                             else
                                             {
-                                                TrySetValue(dataCommand, newObject, objectType, name, value);
+                                                if (value != DBNull.Value)
+                                                    accessor[newObject, name] = value;
+
+                                                //TrySetValue(dataCommand, newObject, objectType, name, value);
                                             }
 
                                         }
                                         else
                                         {
-                                            TrySetValue(dataCommand, newObject, objectType, name, value);
+                                            if (value != DBNull.Value)
+                                                accessor[newObject, name] = value;
+
+                                            //TrySetValue(dataCommand, newObject, objectType, name, value);
                                         }
                                     }
                                     else

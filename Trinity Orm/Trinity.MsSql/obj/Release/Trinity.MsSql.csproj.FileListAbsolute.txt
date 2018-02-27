@@ -12,3 +12,4 @@ I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Release\Trinity.pdb
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Release\Trinity.MsSql.csprojResolveAssemblyReference.cache
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Release\Trinity.MsSql.dll
 I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Release\Trinity.MsSql.pdb
+I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Release\FastMember.Signed.dll

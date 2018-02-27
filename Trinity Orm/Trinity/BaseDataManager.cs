@@ -457,7 +457,7 @@ namespace Trinity
         }
 
 
-        public T Select()
+        public virtual T Select()
         {
             var dataCommand = AddNew();
             dataCommand.SelectAll = true;

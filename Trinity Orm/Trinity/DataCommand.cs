@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -40,6 +39,7 @@ namespace Trinity
                 handler(this, e);
             }
         }
+
         public ResultList SaveChanges()
         {
             return Manager.SaveChanges();
@@ -49,13 +49,12 @@ namespace Trinity
         public event EventHandler<ModelCommandPropertyChangedEventArgs> Validating;
 
         public TableMap TableMap { get; set; }
+
         public virtual void BuildKeys()
         {
-
             var index = 0;
             foreach (var key in this.PrimaryKeys)
             {
-
                 if (index == 0)
                 {
                     this.Where(key, "=", this.GetValue(key));
@@ -70,7 +69,6 @@ namespace Trinity
 
         public virtual List<IColumnMap> GetColumnAttributes(List<IColumnMap> columnMaps = null)
         {
-
             if (columnMaps == null)
                 columnMaps = new List<IColumnMap>();
             var modelType = typeof(T);
@@ -109,9 +107,9 @@ namespace Trinity
             }
             return columnMaps;
         }
+
         public virtual string GetTableAttribute()
         {
-
             var modelType = typeof(T);
             var tableAttribute = modelType.GetCustomAttributes(typeof(TableConfigurationAttribute), false);
             if (tableAttribute.Any())
@@ -121,7 +119,6 @@ namespace Trinity
                 {
                     return table.TableName;
                 }
-
             }
             return modelType.Name;
         }
@@ -169,7 +166,6 @@ namespace Trinity
         }
 
 
-
         public T Model { get; set; }
         public List<string> Changes { get; set; }
         public List<string> PrimaryKeys { get; set; }
@@ -197,7 +193,6 @@ namespace Trinity
             var model = this.Model;
             if (string.IsNullOrEmpty(this.TabelName))
             {
-
             }
             if (this.TableMap == null)
             {
@@ -214,8 +209,8 @@ namespace Trinity
         public string GetTableMapName()
         {
             return string.Format("{0}_{1}", typeof(T).Name, this.TabelName);
-
         }
+
         public virtual string GetTableMap()
         {
             var modelName = this.GetTableMapName();
@@ -291,7 +286,8 @@ namespace Trinity
             if (getMethod.IsStatic)
                 throw new ArgumentException("static method");
 
-            return memberExpression.Member.Name; ;
+            return memberExpression.Member.Name;
+            ;
         }
 
         public IDataCommand<T> WithKey<TField>(Expression<Func<T, TField>> field)
@@ -308,9 +304,9 @@ namespace Trinity
 
             return this;
         }
+
         public IDataCommand<T> WithKeys(string[] keys)
         {
-
             if (keys != null)
                 foreach (var key in keys)
                 {
@@ -331,7 +327,6 @@ namespace Trinity
 
             return this;
         }
-
 
 
         public CommandExpression Convert<T1>(Expression<Func<T1, object>> expression)
@@ -370,6 +365,7 @@ namespace Trinity
 
             throw new InvalidOperationException("Unable to convert expression to SQL");
         }
+
         public CommandExpression Convert<T1>(Expression<Func<T1, bool>> expression)
         {
             if (expression.Body is BinaryExpression)
@@ -466,7 +462,6 @@ namespace Trinity
         }
 
 
-
         private CommandExpression Convert<T>(Expression<Func<T, object>> expression, UnaryExpression body)
         {
             var constant = body.Operand as ConstantExpression;
@@ -497,7 +492,6 @@ namespace Trinity
 
         private CommandExpression Convert<T1>(BinaryExpression expression)
         {
-
             //TODO make paramters values.
             var left = ConvertToString(CreateExpression<T>(expression.Left));
             var right = ConvertToObject(CreateExpression<T>(expression.Right));
@@ -528,19 +522,12 @@ namespace Trinity
             }
 
 
-
-
-
-
             return new CommandExpression()
             {
                 Columnname = left,
                 Expression = op,
                 Value = right
             };
-
-
-
         }
 
         private string Convert(object value)
@@ -593,7 +580,6 @@ namespace Trinity
         }
 
 
-
         public T FirstOrDefault()
         {
             this.TopIndex = 1;
@@ -617,8 +603,13 @@ namespace Trinity
         //TODO TEST
         public IDataCommand<T> Column(string name)
         {
-            this.SelectAll = false;
-            this.Columns.Add(name);
+
+            if (name.Contains("[") == false && name.Contains("]") == false)
+                name = $"[{name}]";
+
+
+            if (this.Columns.FirstOrDefault(m => m == name) == null)
+                this.Columns.Add(name);
             return this;
         }
 
@@ -632,6 +623,7 @@ namespace Trinity
             this.TakeIndex = rows;
             return this;
         }
+
         public IDataCommand<T> Skip(int rows)
         {
             this.SkipIndex = rows;
@@ -649,11 +641,13 @@ namespace Trinity
             this.TabelName = tableName;
             return this;
         }
+
         public IDataCommand<T> ForInsert()
         {
             this.CommandType = DataCommandType.Insert;
             return this;
         }
+
         public IDataCommand<T> ForUpdate()
         {
             this.CommandType = DataCommandType.Update;
@@ -667,22 +661,24 @@ namespace Trinity
             {
                 if (opperator == "=")
                 {
-                    this.WhereText = string.Format(" And [{0}] is null", column);
+                    this.WhereText += string.Format(" And [{0}] is null", column);
                 }
                 else
                 {
-                    this.WhereText = string.Format(" And [{0}] is not null", column);
+                    this.WhereText += string.Format(" And [{0}] is not null", column);
                 }
             }
             else
             {
                 var parameterName = string.Format("{0}_{1}", column.Replace(" ", ""), 2);
-                this.WhereText += string.Format(" And [{0}] {1} {2}", column, opperator, string.Format("@{0}", parameterName));
+                this.WhereText += string.Format(" And [{0}] {1} {2}", column, opperator,
+                    string.Format("@{0}", parameterName));
                 SetParameter(parameterName, column, value, true);
             }
             return this;
         }
-        public IDataCommand<T> From(string tableName = "")
+
+        public virtual IDataCommand<T> From(string tableName = "")
         {
             TabelName = tableName;
             return this;
@@ -703,10 +699,10 @@ namespace Trinity
             SetParameter(parameterEnd, property, end, true);
 
             return this;
-
         }
 
-        public virtual IDataCommand<T> WhereNotBetween<TField>(Expression<Func<T, TField>> field, object begin, object end)
+        public virtual IDataCommand<T> WhereNotBetween<TField>(Expression<Func<T, TField>> field, object begin,
+            object end)
         {
             string property = GetField(field);
 
@@ -721,7 +717,6 @@ namespace Trinity
             SetParameter(parameterEnd, property, end, true);
 
             return this;
-
         }
 
         public virtual IDataCommand<T> And(string filterString)
@@ -733,7 +728,6 @@ namespace Trinity
 
         public virtual IDataCommand<T> And(Expression<Func<T, bool>> expression)
         {
-
             var filter = Convert(expression);
             And(filter.Columnname, filter.Expression, filter.Value);
             return this;
@@ -741,7 +735,8 @@ namespace Trinity
 
         public virtual IDataCommand<T> Or(string filterString)
         {
-            this.WhereText += string.Format(" Or {0}", filterString); ;
+            this.WhereText += string.Format(" Or {0}", filterString);
+            ;
             return this;
         }
 
@@ -751,17 +746,18 @@ namespace Trinity
             {
                 if (opperator == "=")
                 {
-                    this.WhereText = string.Format(" Or [{0}] is null", column);
+                    this.WhereText += string.Format(" Or [{0}] is null", column);
                 }
                 else
                 {
-                    this.WhereText = string.Format(" Or [{0}] is not null", column);
+                    this.WhereText += string.Format(" Or [{0}] is not null", column);
                 }
             }
             else
             {
                 string parameterName = string.Format("{0}_{1}", column.Replace(" ", ""), 2);
-                this.WhereText += string.Format(" Or [{0}] {1} {2}", column, opperator, string.Format("@{0}", parameterName));
+                this.WhereText += string.Format(" Or [{0}] {1} {2}", column, opperator,
+                    string.Format("@{0}", parameterName));
                 this.SetParameter(parameterName, column, value, true);
             }
 
@@ -786,7 +782,8 @@ namespace Trinity
         {
             if (string.IsNullOrEmpty(this.OrderByString))
             {
-                this.OrderByString = string.Format(" ORDER BY [{0}] DESC", column); ;
+                this.OrderByString = string.Format(" ORDER BY [{0}] DESC", column);
+                ;
             }
             else
             {
@@ -810,8 +807,6 @@ namespace Trinity
         }
 
 
-
-
         public IDataCommand<T> Where<TField>(Expression<Func<T, TField>> field, string opperator, object value)
         {
             string property = GetField(field);
@@ -827,7 +822,6 @@ namespace Trinity
 
         public virtual IDataCommand<T> Where(string column, string opperator, object value)
         {
-
             if (value == null)
             {
                 if (opperator == "=")
@@ -842,7 +836,8 @@ namespace Trinity
             else
             {
                 string parameterName = string.Format("{0}_{1}", column.Replace(" ", ""), 2);
-                this.WhereText = string.Format("[{0}] {1} {2}", column, opperator, string.Format("@{0}", parameterName));
+                this.WhereText = string.Format("[{0}] {1} {2}", column, opperator,
+                    string.Format("@{0}", parameterName));
                 this.SetParameter(parameterName, column, value, true);
             }
             return this;
@@ -850,7 +845,6 @@ namespace Trinity
 
         public IList<T> ExecuteToList()
         {
-
             var list = new List<T>();
             var result = this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
             this.Manager.Remove(this);
@@ -884,7 +878,6 @@ namespace Trinity
 
         public async void ExecuteToList(Action<IList<T>> callback)
         {
-
             var list = new List<T>();
             var result = await this.Manager.ExecuteCommandAsync(this) as ModelCommandResult<T>;
             this.Manager.Remove(this);
@@ -896,14 +889,11 @@ namespace Trinity
                 }
             }
             callback.Invoke(list);
-
         }
-
     }
 
     public class CommandExpression
     {
-
         public string Columnname { get; set; }
         public string Expression { get; set; }
         public object Value { get; set; }
@@ -936,10 +926,7 @@ namespace Trinity
         public string TabelName
         {
             get { return _tabelName; }
-            set
-            {
-                _tabelName = value;
-            }
+            set { _tabelName = value; }
         }
 
         public List<IDataParameter> Parameters { get; set; }
@@ -967,7 +954,6 @@ namespace Trinity
             }
 
             this.Parameters = parameters;
-
         }
 
         public void SetWhereText(string text)
@@ -989,6 +975,8 @@ namespace Trinity
         public string BuildSqlCommand()
         {
             if (!string.IsNullOrEmpty(this.SqlCommandText)) return string.Empty;
+
+
             switch (this.CommandType)
             {
                 case DataCommandType.Select:
@@ -1040,7 +1028,8 @@ namespace Trinity
             }
             if (string.IsNullOrEmpty(valueString)) return string.Empty;
 
-            commandString = commandString.Remove(commandString.Length - 1) + string.Format(") VALUES ({0})", valueString.Remove(valueString.Length - 1));
+            commandString = commandString.Remove(commandString.Length - 1) +
+                            string.Format(") VALUES ({0})", valueString.Remove(valueString.Length - 1));
             if (!string.IsNullOrEmpty(this.WhereText))
             {
                 commandString += this.WhereText;
@@ -1058,13 +1047,15 @@ namespace Trinity
                 commandString += string.Format(" TOP {0} ", TopIndex);
             }
 
-            commandString = (!this.SelectAll ? commandString + this.GetColumns() : commandString + " * ") + this.GetFrom() + this.GetWhere();
+            commandString = (!this.SelectAll ? commandString + this.GetColumns() : commandString + " * ") +
+                            this.GetFrom() + this.GetWhere();
             if (!string.IsNullOrEmpty(this.OrderByString))
             {
                 commandString += this.OrderByString;
                 if (this.TakeIndex > 0)
                 {
-                    commandString += string.Format("OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", this.SkipIndex, this.TakeIndex);
+                    commandString += string.Format("OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", this.SkipIndex,
+                        this.TakeIndex);
                 }
             }
             this.SqlCommandText = commandString;
@@ -1073,7 +1064,8 @@ namespace Trinity
 
         private string GetColumns()
         {
-            string columnString = this.Columns.Aggregate(string.Empty, (current, column) => current + string.Format("{0},", column));
+            string columnString = this.Columns.Aggregate(string.Empty,
+                (current, column) => current + string.Format("{0},", column));
             if (!string.IsNullOrEmpty(columnString))
                 columnString = columnString.Remove(columnString.Length - 1);
             return columnString;
@@ -1110,7 +1102,6 @@ namespace Trinity
 
         protected virtual string GetWhere()
         {
-
             if (!string.IsNullOrEmpty(this.WhereText))
             {
                 if (this.WhereText.ToLower().Contains("where"))
@@ -1139,7 +1130,6 @@ namespace Trinity
 
         public DataCommand AddColumns(string[] columns)
         {
-
             for (int i = 0; i < columns.Count(); i++)
             {
                 this.AddColumn(columns[i]);

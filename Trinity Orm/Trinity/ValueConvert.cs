@@ -169,10 +169,46 @@ namespace Trinity
             return ToStringValue(value);
         }
 
-        public static int ToInt32(this object value)
+        public static Int32 ToInt32(this object value)
         {
-            return ToInt(value);
+            if (value == null || value == DBNull.Value)
+            {
+                return 0;
+            }
+            if (value.ToString() != string.Empty)
+            {
+
+                Int32 tempValue = 0;
+                if (Int32.TryParse(value.ToStringValue(), out tempValue))
+                {
+                    return tempValue;
+                }
+            }
+            return 0;
         }
+
+        public static Int64 ToInt64(this object value)
+        {
+            if (value == null || value == DBNull.Value)
+            {
+                return 0;
+            }
+            if (value.ToString() != string.Empty)
+            {
+
+                Int64 tempValue = 0;
+                if (Int64.TryParse(value.ToStringValue(), out tempValue))
+                {
+                    return tempValue;
+                }
+            }
+            return 0;
+
+
+        }
+
+        
+
 
         public static string ToString(object value)
         {
@@ -616,7 +652,7 @@ namespace Trinity
                 case TypeCode.UInt32:
                     return value.ToInt();
                 case TypeCode.Int64:
-                    return value.ToInt();
+                    return value.ToInt64();
                 case TypeCode.UInt64:
                     return value.ToInt();
                 case TypeCode.Single:

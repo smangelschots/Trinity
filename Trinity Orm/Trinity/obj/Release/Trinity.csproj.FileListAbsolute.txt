@@ -5,6 +5,5 @@ I:\Projects\Trinity\Trinity\obj\Release\Trinity.pdb
 I:\Projects\Trinity\Trinity\obj\Release\Trinity.csprojResolveAssemblyReference.cache
 I:\Projects\Github\Trinity\Trinity Orm\Trinity\bin\Release\Trinity.dll
 I:\Projects\Github\Trinity\Trinity Orm\Trinity\bin\Release\Trinity.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Release\Trinity.csprojResolveAssemblyReference.cache
 I:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Release\Trinity.dll
 I:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Release\Trinity.pdb
