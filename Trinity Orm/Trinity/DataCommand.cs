@@ -123,7 +123,7 @@ namespace Trinity
             return modelType.Name;
         }
 
-        public object GetValue(string name)
+        public virtual object GetValue(string name)
         {
             var propInfo = typeof(T).GetProperty(name);
             try
@@ -846,6 +846,7 @@ namespace Trinity
         public IList<T> ExecuteToList()
         {
             var list = new List<T>();
+            TopIndex = 0;
             var result = this.Manager.ExecuteCommand(this) as ModelCommandResult<T>;
             this.Manager.Remove(this);
             if (result != null)

@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using FastMember;
 
+
 namespace Trinity.MsSql
 {
     public class SqlServerDataManager<T> : BaseDataManager<SqlModelCommand<T>>, IModelCommand<T>
@@ -322,6 +323,8 @@ namespace Trinity.MsSql
 
             using (var dataReader = command.ExecuteReader())
             {
+                
+
                 result.RecordsAffected = dataReader.RecordsAffected;
                 if (dataReader.RecordsAffected == 0)
                 {
@@ -347,6 +350,7 @@ namespace Trinity.MsSql
                 }
 
             }
+            //TODO error when transaction is full 
             result.AddMessage(string.Format("{0} executed with {1} rows affected", dataCommand.SqlCommandText,
                 result.RecordsAffected));
             dataCommand.ResetCommand();
@@ -502,26 +506,33 @@ namespace Trinity.MsSql
 
             if (TableMapFromDatabase)
             {
+
                 var map = dataCommand.GetTableMap();
-                if (!string.IsNullOrEmpty(map))
+                if (dataCommand.SelectAll == false)
                 {
-                    var columns = dataCommand.GetColumnAttributes();
-                    foreach (var columnMap in columns)
+                   
+                    if (!string.IsNullOrEmpty(map))
                     {
-                        bool addColumn = true;
-                        if (dataCommand.TableMap == null)
-                            addColumn = false;
+                        var columns = dataCommand.GetColumnAttributes();
+                        foreach (var columnMap in columns)
+                        {
+                            bool addColumn = true;
+                            if (dataCommand.TableMap == null)
+                                addColumn = false;
 
-                        var column = dataCommand.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == columnMap.ColumnName);
-                        if (column == null)
-                            addColumn = false;
+                            var column = dataCommand.TableMap.ColumnMaps.FirstOrDefault(m => m.ColumnName == columnMap.ColumnName);
+                            if (column == null)
+                                addColumn = false;
 
 
-                        if (addColumn)
-                            dataCommand.Column(columnMap.ColumnName);
+                            if (addColumn)
+                                dataCommand.Column(columnMap.ColumnName);
+                        }
+                        dataCommand.SelectAll = false;
                     }
-                    dataCommand.SelectAll = false;
+
                 }
+
             }
 
 
@@ -615,54 +626,75 @@ namespace Trinity.MsSql
                                             {
                                                 try
                                                 {
-
-
                                                     if (value != DBNull.Value)
                                                         accessor[newObject, column.PropertyName] = value;
                                                 }
                                                 catch (Exception e)
                                                 {
-                                                    if (value != DBNull.Value)
+                                                    try
                                                     {
-                                                        var prop = objectType.GetProperty(column.PropertyName);
-                                                        accessor[newObject, column.PropertyName] = value.ConvertValue(prop);
+                                                        if (value != DBNull.Value)
+                                                        {
+                                                            var prop = objectType.GetProperty(column.PropertyName);
+                                                            accessor[newObject, column.PropertyName] = value.ConvertValue(prop);
 
+                                                        }
                                                     }
+                                                    catch (Exception exception)
+                                                    {
+
+                                                        var prop = objectType.GetProperty(column.PropertyName);
+                                                        if (prop != null)
+                                                        {
+                                                            if (value != DBNull.Value)
+                                                            {
+                                                                try
+                                                                {
+                                                                    prop.SetValue(newObject, value, null);
+                                                                }
+                                                                catch (Exception)
+                                                                {
+                                                                    prop.SetValue(newObject, value.ConvertValue(prop), null);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
 
                                                 }
 
 
-                                                //var prop = objectType.GetProperty(column.PropertyName);
-                                                //if (prop != null)
-                                                //{
-                                                //    if (value != DBNull.Value)
-                                                //    {
-                                                //        try
-                                                //        {
-                                                //            prop.SetValue(newObject, value, null);
-                                                //        }
-                                                //        catch (Exception)
-                                                //        {
-                                                //            prop.SetValue(newObject, value.ConvertValue(prop), null);
-                                                //        }
-                                                //    }
-                                                //}
                                             }
                                             else
                                             {
-                                                if (value != DBNull.Value)
-                                                    accessor[newObject, name] = value;
+                                                try
+                                                {
+                                                    if (value != DBNull.Value)
+                                                        accessor[newObject, name] = value;
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    TrySetValue(dataCommand, newObject, objectType, name, value);
+                                                }
 
-                                                //TrySetValue(dataCommand, newObject, objectType, name, value);
+
+
                                             }
 
                                         }
                                         else
                                         {
-                                            if (value != DBNull.Value)
-                                                accessor[newObject, name] = value;
+                                            try
+                                            {
+                                                if (value != DBNull.Value)
+                                                    accessor[newObject, name] = value;
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                TrySetValue(dataCommand, newObject, objectType, name, value);
+                                            }
 
-                                            //TrySetValue(dataCommand, newObject, objectType, name, value);
+
                                         }
                                     }
                                     else

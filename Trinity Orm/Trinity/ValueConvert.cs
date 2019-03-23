@@ -500,6 +500,19 @@ namespace Trinity
                 value = value.ToString().Replace(".", "");
             }
             float.TryParse(value.ToString(), out myD);
+
+            if (float.IsPositiveInfinity(myD))
+            {
+
+                myD = float.MaxValue;
+
+            }
+            else if (float.IsNegativeInfinity(myD))
+            {
+
+                myD = float.MinValue;
+            }
+
             return myD;
         }
 
@@ -544,7 +557,8 @@ namespace Trinity
                 return 0;
             if (value.ToString().Contains(","))
             {
-                value = value.ToString().Replace(".", "");
+                value = value.ToString().Replace(".", "").Replace("+","");
+              
             }
             decimal.TryParse(value.ToString(), out myD);
             return myD;

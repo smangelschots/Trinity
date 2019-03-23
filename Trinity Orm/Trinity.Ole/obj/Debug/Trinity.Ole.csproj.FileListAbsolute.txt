@@ -1,14 +1,9 @@
-I:\Projects\Trinity\Trinity.Ole\bin\Debug\Trinity.Ole.dll
-I:\Projects\Trinity\Trinity.Ole\bin\Debug\Trinity.Ole.pdb
-I:\Projects\Trinity\Trinity.Ole\bin\Debug\Trinity.dll
-I:\Projects\Trinity\Trinity.Ole\bin\Debug\Trinity.pdb
-I:\Projects\Trinity\Trinity.Ole\obj\Debug\Trinity.Ole.csprojResolveAssemblyReference.cache
-I:\Projects\Trinity\Trinity.Ole\obj\Debug\Trinity.Ole.dll
-I:\Projects\Trinity\Trinity.Ole\obj\Debug\Trinity.Ole.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csprojResolveAssemblyReference.cache
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.pdb
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.pdb
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.pdb
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csprojAssemblyReference.cache
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csproj.CoreCompileInputs.cache
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csproj.CopyComplete
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.pdb

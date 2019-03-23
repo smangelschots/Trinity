@@ -8,6 +8,7 @@ namespace Trinity
         {
             Default = string.Empty;
         }
+
         public string ColumnName { get; set; }
         public SqlDbType SqlDbType { get; set; }
         public bool IsPrimaryKey { get; set; }

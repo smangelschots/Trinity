@@ -249,6 +249,14 @@ namespace Trinity
             }
         }
 
+        public void AddRangeForInsert(IList<T> list)
+        {
+            this.DataManager.ClearCommands();
+            foreach (var item in list)
+            {
+               AddForInsert(item, false);
+            }
+        }
         /// <summary>
         /// Add existing database model to datamanger for update
         /// DO NOT USE FOR INSERT IF YOU DONT HAVE A ID
@@ -323,12 +331,19 @@ namespace Trinity
 
         public virtual ResultList SaveChanges()
         {
+         
             OnBeforeSave();
             var result = new AfterSaveEventArgs();
             var resultList= this.DataManager.SaveChanges();
             result.Results = resultList;
             OnAfterSave(result);
             return resultList;
+        }
+
+        public int GetChanges()
+        {
+
+            return 0;
         }
 
         /// <summary>

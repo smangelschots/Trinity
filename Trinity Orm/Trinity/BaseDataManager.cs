@@ -460,7 +460,7 @@ namespace Trinity
         public virtual T Select()
         {
             var dataCommand = AddNew();
-            dataCommand.SelectAll = true;
+            dataCommand.SelectAll = false;
             dataCommand.CommandType = DataCommandType.Select;
 
             return dataCommand;

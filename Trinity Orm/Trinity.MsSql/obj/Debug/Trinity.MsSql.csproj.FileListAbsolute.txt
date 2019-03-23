@@ -1,15 +1,10 @@
-I:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.MsSql.dll
-I:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.MsSql.pdb
-I:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.dll
-I:\Projects\Trinity\Trinity.MsSql\bin\Debug\Trinity.pdb
-I:\Projects\Trinity\Trinity.MsSql\obj\Debug\Trinity.MsSql.csprojResolveAssemblyReference.cache
-I:\Projects\Trinity\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
-I:\Projects\Trinity\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\FastMember.Signed.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.pdb
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csprojResolveAssemblyReference.cache
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
-I:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.pdb
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\FastMember.Signed.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.pdb
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csprojAssemblyReference.cache
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CoreCompileInputs.cache
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CopyComplete
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
+E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb

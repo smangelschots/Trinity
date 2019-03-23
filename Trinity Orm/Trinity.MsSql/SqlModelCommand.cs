@@ -352,6 +352,30 @@ namespace Trinity.MsSql
             }
         }
 
+
+        public override object GetValue(string name)
+        {
+            try
+            {
+                var model = this.Model as IObjectDataManager;
+                if (model != null)
+                {
+                    return model.GetData(name);
+                }
+                else
+                {
+                    return base.GetValue(name);
+                }
+            }
+            catch (Exception exception)
+            {
+                var message =
+                    $"Can't GetValue from property {name} try adding the [IgnoreAttribute] to the property {exception.Message} {exception.StackTrace}";
+                LoggingService.SendToLog("DataCommand", message, LogType.Error);
+            }
+            return DBNull.Value;
+        }
+
         //TODO TEST
         public override IDataCommand<T> Count<TField>(Expression<Func<T, TField>> field)
         {

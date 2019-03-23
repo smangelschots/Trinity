@@ -42,7 +42,7 @@ namespace Trinity
         public string LogName
         { get; set; }
 
-        public static LogType LoggType = LogType.Error;
+        public static LogType LoggType = LogType.Information;
         private static string _errorLog;
 
         private static HtmlLogWriter HtmlLogWriter;
@@ -67,7 +67,7 @@ namespace Trinity
 
         public static void SendErrorToLog(Exception e)
         {
-            SendToLog(LogService.LogName, e.ToString(),LogType.Error);
+            SendToLog(LogService.LogName, e.ToString(), LogType.Error);
         }
 
 
@@ -113,13 +113,14 @@ namespace Trinity
                 {
                     _errorLog += $"{log} - {message} - {errorType.ToString()}" + Environment.NewLine;
 
-                    LogService.OnSentToLog(new LoggingEventArgs()
-                    {
-                        Log = log,
-                        LogType = errorType,
-                        Message = message,
-                        UserName = Environment.UserName,
-                    });
+                    if (LogService != null)
+                        LogService.OnSentToLog(new LoggingEventArgs()
+                        {
+                            Log = log,
+                            LogType = errorType,
+                            Message = message,
+                            UserName = Environment.UserName,
+                        });
                     if (string.IsNullOrEmpty(ConnectionString) == false)
                     {
                         try
