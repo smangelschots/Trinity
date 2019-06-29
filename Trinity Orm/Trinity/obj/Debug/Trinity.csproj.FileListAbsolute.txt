@@ -4,3 +4,9 @@ E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csproj.CoreCompileInputs.cache
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.dll
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.pdb
+C:\Projects\Github\Trinity\Trinity Orm\Trinity\bin\Debug\Trinity.dll
+C:\Projects\Github\Trinity\Trinity Orm\Trinity\bin\Debug\Trinity.pdb
+C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csprojAssemblyReference.cache
+C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csproj.CoreCompileInputs.cache
+C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.dll
+C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.pdb

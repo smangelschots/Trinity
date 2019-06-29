@@ -8,3 +8,12 @@ E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Tr
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CopyComplete
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.dll
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.pdb
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.dll
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.pdb
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csprojAssemblyReference.cache
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CoreCompileInputs.cache
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CopyComplete
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
+C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb
