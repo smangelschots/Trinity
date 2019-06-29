@@ -765,6 +765,27 @@ namespace Trinity
             return this;
         }
 
+
+        public virtual IDataCommand<T> OrderBy<TField>(Expression<Func<T, TField>> field)
+        {
+            string property = GetField(field);
+            return OrderBy(property);
+        }
+
+
+
+
+        public virtual IDataCommand<T> OrderByDesc<TField>(Expression<Func<T, TField>> field)
+        {
+            string property = GetField(field);
+            return OrderByDesc(property);
+        }
+
+
+
+
+
+
         public virtual IDataCommand<T> OrderBy(string column)
         {
             if (string.IsNullOrEmpty(this.OrderByString))
