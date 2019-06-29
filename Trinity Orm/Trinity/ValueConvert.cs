@@ -30,7 +30,7 @@ namespace Trinity
                         {
                             if (objectValue != DBNull.Value)
                             {
-                                return (T) objectValue;
+                                return (T)objectValue;
                             }
                         }
                         catch (Exception exception)
@@ -129,9 +129,17 @@ namespace Trinity
 
         }
 
+        public static float? ToFloatNullable(object value)
+        {
+            if (value == null || value == DBNull.Value)
+            {
+                return null;
+            }
 
-
-
+            if (value.ToStringValue() != string.Empty)
+                return value.ToFloat();
+            return 0;
+        }
 
         public static int ToInt(this object value)
         {
@@ -140,7 +148,7 @@ namespace Trinity
             {
                 return 0;
             }
-            if (value.ToString() != string.Empty)
+            if (value.ToStringValue() != string.Empty)
             {
 
                 int tempValue = 0;
@@ -207,7 +215,7 @@ namespace Trinity
 
         }
 
-        
+
 
 
         public static string ToString(object value)
@@ -254,7 +262,7 @@ namespace Trinity
 
         public static bool IsFileLocked(this FileInfo file)
         {
-            FileStream fileStream = (FileStream) null;
+            FileStream fileStream = (FileStream)null;
             try
             {
                 if (!file.IsReadOnly)
@@ -294,7 +302,7 @@ namespace Trinity
 
         public static XmlDocument ToXml(this object value)
         {
-            return (XmlDocument) value;
+            return (XmlDocument)value;
         }
 
         public static DateTime? ToDateTimeNullable(this object value)
@@ -557,8 +565,8 @@ namespace Trinity
                 return 0;
             if (value.ToString().Contains(","))
             {
-                value = value.ToString().Replace(".", "").Replace("+","");
-              
+                value = value.ToString().Replace(".", "").Replace("+", "");
+
             }
             decimal.TryParse(value.ToString(), out myD);
             return myD;
