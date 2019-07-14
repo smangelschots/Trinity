@@ -10,7 +10,7 @@ namespace Trinity.Test
     [TestClass]
     public class MySqlUnitTest
     {
-        public string connectionString = "Server=localhost;Database=test;Uid=root;Pwd=Service01;";
+        public string connectionString = "";
 
         private MySqlDataContext context ;
 
