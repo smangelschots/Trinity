@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Trinity.Ole
 {
-    public class OleDataManager<T> : BaseDataManager<OleModelCommand<T>>, IModelCommand<T>
+    public class OleDataManager<T> : DataManagerBase<OleModelCommand<T>>, IModelCommand<T>
         where T : class
     {
         public OleDataManager(string connectionString)

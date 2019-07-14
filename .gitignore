@@ -27,6 +27,7 @@ $RECYCLE.BIN/
 .DS_Store
 .AppleDouble
 .LSOverride
+.vs
 
 # Thumbnails
 ._*
@@ -40,6 +41,9 @@ $RECYCLE.BIN/
 .AppleDesktop
 Network Trash Folder
 Temporary Items
+packages
 .apdisk
 *.cache
 *.dll
+*.dll
+*.pdb

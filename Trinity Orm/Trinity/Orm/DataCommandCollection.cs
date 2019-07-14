@@ -201,7 +201,7 @@ namespace Trinity
 
         protected override void ClearItems()
         {
-            var eventArgs = new DataCommandCollectionEventArgs(ChangeType.BeforeCleard, null, null, null, false);
+            var eventArgs = new DataCommandCollectionEventArgs(ChangeType.BeforeClear, null, null, null, false);
             EventHandler<DataCommandCollectionEventArgs> temp = this.Changing;
             if (temp != null)
             {

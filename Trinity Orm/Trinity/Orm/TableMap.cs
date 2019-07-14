@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Trinity
 {
+
+
     public class TableMap
     {
         public TableMap()
@@ -9,6 +13,7 @@ namespace Trinity
             this.ColumnMaps = new List<IColumnMap>();
             this.KeyMaps = new List<KeyMap>();
         }
+
         public string Schema { get; set; }
         public string TableName { get; set; }
         public string TableType { get; set; }
@@ -33,5 +38,9 @@ namespace Trinity
             }
             return items;
         }
+
+
+
+
     }
 }

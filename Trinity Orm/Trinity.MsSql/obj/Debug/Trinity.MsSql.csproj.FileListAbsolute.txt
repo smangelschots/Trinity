@@ -17,3 +17,12 @@ C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csp
 C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CopyComplete
 C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
 C:\Projects\Github\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.MsSql.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\bin\Debug\Trinity.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csprojAssemblyReference.cache
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CoreCompileInputs.cache
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.csproj.CopyComplete
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.MsSql\obj\Debug\Trinity.MsSql.pdb

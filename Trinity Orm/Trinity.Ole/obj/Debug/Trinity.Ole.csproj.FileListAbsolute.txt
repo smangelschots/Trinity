@@ -7,3 +7,12 @@ E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trin
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csproj.CopyComplete
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.dll
 E:\VS\BouwNetClient_FORK_20181012\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.Ole.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\bin\Debug\Trinity.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csprojAssemblyReference.cache
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csproj.CoreCompileInputs.cache
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.csproj.CopyComplete
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity.Ole\obj\Debug\Trinity.Ole.pdb

@@ -11,7 +11,7 @@ namespace Trinity
 {
 
 
-    public abstract class BaseDataManager<T> : IDataManager<T> where T : IDataCommand
+    public abstract class DataManagerBase<T> : IDataManager<T> where T : IDataCommand
     {
         private DbProviderFactory _factory;
 
@@ -48,7 +48,7 @@ namespace Trinity
             System.Diagnostics.Debug.WriteLine(x.ToString());
         }
 
-        protected BaseDataManager(string connectionString, string providerName) : this()
+        protected DataManagerBase(string connectionString, string providerName) : this()
         {
             this.ConnectionString = connectionString;
             ProviderName = providerName;
@@ -64,7 +64,7 @@ namespace Trinity
             }
         }
 
-        private BaseDataManager()
+        private DataManagerBase()
         {
             this.Commands = new List<IDataCommand>();
             this.Errors = new List<DataError>();
@@ -72,7 +72,7 @@ namespace Trinity
         }
 
         //TODO Check if this works
-        protected BaseDataManager(DbConnection connection)
+        protected DataManagerBase(DbConnection connection)
             : this()
         {
             this._connection = connection;

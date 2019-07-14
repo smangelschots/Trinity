@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trinity</RootNamespace>
     <AssemblyName>Trinity</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\BouwNetClient2012\</SolutionDir>
@@ -41,6 +41,9 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -51,84 +54,88 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TrinityActivator.cs" />
-    <Compile Include="AfterSaveEventArgs.cs" />
-    <Compile Include="AutoJoinAttribute.cs" />
-    <Compile Include="BaseDataContext.cs" />
-    <Compile Include="CachingService.cs" />
-    <Compile Include="ColumnMap.cs" />
-    <Compile Include="CommandResult.cs" />
-    <Compile Include="BaseDataManager.cs" />
-    <Compile Include="ChangeType.cs" />
-    <Compile Include="ColumnConfigurationAttribute.cs" />
-    <Compile Include="ColumnConfiguration.cs" />
-    <Compile Include="Database.cs" />
-    <Compile Include="DataColumn.cs" />
-    <Compile Include="DataParameter.cs" />
-    <Compile Include="DataTabelCommandResult.cs" />
-    <Compile Include="EditEventHandlerArgs.cs" />
-    <Compile Include="ExpandoColumn.cs" />
-    <Compile Include="GenericPropertyAccessor.cs" />
-    <Compile Include="HtmlLog.cs" />
-    <Compile Include="IColumnAttribute.cs" />
-    <Compile Include="IColumnMap.cs" />
-    <Compile Include="ICommandResult.cs" />
-    <Compile Include="IDataParameter.cs" />
-    <Compile Include="IGenericPropertyAccessor.cs" />
-    <Compile Include="IgnoreAttribute.cs" />
-    <Compile Include="IMapper.cs" />
-    <Compile Include="IMapper2.cs" />
-    <Compile Include="IModelBase.cs" />
-    <Compile Include="ExpressionToSql.cs" />
-    <Compile Include="CommandType.cs" />
-    <Compile Include="DataBindingList.cs" />
-    <Compile Include="DataCommand.cs" />
-    <Compile Include="DataCommandCollection.cs" />
-    <Compile Include="DataCommandCollectionEventArgs.cs" />
-    <Compile Include="DataCommandError.cs" />
-    <Compile Include="DataResult.cs" />
-    <Compile Include="DataValidation.cs" />
-    <Compile Include="DataValidationCollection.cs" />
-    <Compile Include="Dmq.cs" />
-    <Compile Include="IDataCommand.cs" />
-    <Compile Include="LogType.cs" />
-    <Compile Include="IModelCommand.cs" />
-    <Compile Include="IModelConfiguration.cs" />
-    <Compile Include="IModelConfigurationManager.cs" />
-    <Compile Include="IModelDataManger.cs" />
-    <Compile Include="IObjectDataManager.cs" />
-    <Compile Include="IPrimaryKeyAttribute.cs" />
-    <Compile Include="IDataManager.cs" />
-    <Compile Include="ITableNameAttribute.cs" />
-    <Compile Include="LoggingEventArgs.cs" />
-    <Compile Include="LoggingService.cs" />
-    <Compile Include="Lookupconfiguration.cs" />
-    <Compile Include="ModelBase.cs" />
-    <Compile Include="ModelCommandExecutedEventArgs.cs" />
-    <Compile Include="ModelCommandPropertyChangedEventArgs.cs" />
-    <Compile Include="ModelCommandValidationEventArgs.cs" />
-    <Compile Include="ModelConfiguration.cs" />
-    <Compile Include="ModelCommandResult.cs" />
-    <Compile Include="ModelValidation.cs" />
-    <Compile Include="PrimaryKeyAttribute.cs" />
+    <Compile Include="Lob\ApplicationModel.cs" />
+    <Compile Include="Lob\ObjectModel.cs" />
+    <Compile Include="Orm\TrinityActivator.cs" />
+    <Compile Include="Orm\AfterSaveEventArgs.cs" />
+    <Compile Include="Orm\AutoJoinAttribute.cs" />
+    <Compile Include="Orm\DataContextBase.cs" />
+    <Compile Include="Services\CachingService.cs" />
+    <Compile Include="Orm\ColumnMap.cs" />
+    <Compile Include="Orm\CommandResult.cs" />
+    <Compile Include="Orm\DataManagerBase.cs" />
+    <Compile Include="Orm\ChangeType.cs" />
+    <Compile Include="Orm\ColumnConfigurationAttribute.cs" />
+    <Compile Include="Orm\ColumnConfiguration.cs" />
+    <Compile Include="Services\Database.cs" />
+    <Compile Include="Orm\DataColumn.cs" />
+    <Compile Include="Orm\DataParameter.cs" />
+    <Compile Include="Orm\DataTabelCommandResult.cs" />
+    <Compile Include="Orm\EditEventHandlerArgs.cs" />
+    <Compile Include="Orm\ExpandoColumn.cs" />
+    <Compile Include="Orm\GenericPropertyAccessor.cs" />
+    <Compile Include="Logging\HtmlLog.cs" />
+    <Compile Include="Interfaces\IColumnAttribute.cs" />
+    <Compile Include="Interfaces\IColumnMap.cs" />
+    <Compile Include="Interfaces\ICommandResult.cs" />
+    <Compile Include="Interfaces\IDataParameter.cs" />
+    <Compile Include="Interfaces\IGenericPropertyAccessor.cs" />
+    <Compile Include="Interfaces\IgnoreAttribute.cs" />
+    <Compile Include="Interfaces\IMapper.cs" />
+    <Compile Include="Interfaces\IMapper2.cs" />
+    <Compile Include="Interfaces\IModelBase.cs" />
+    <Compile Include="Orm\ExpressionToSql.cs" />
+    <Compile Include="Orm\CommandType.cs" />
+    <Compile Include="Services\DataBindingList.cs" />
+    <Compile Include="Orm\DataCommand.cs" />
+    <Compile Include="Orm\DataCommandCollection.cs" />
+    <Compile Include="Orm\DataCommandCollectionEventArgs.cs" />
+    <Compile Include="Logging\DataCommandError.cs" />
+    <Compile Include="Services\DataResult.cs" />
+    <Compile Include="Services\DataValidation.cs" />
+    <Compile Include="Services\DataValidationCollection.cs" />
+    <Compile Include="Orm\Dmq.cs" />
+    <Compile Include="Interfaces\IDataCommand.cs" />
+    <Compile Include="Logging\LogType.cs" />
+    <Compile Include="Interfaces\IModelCommand.cs" />
+    <Compile Include="Interfaces\IModelConfiguration.cs" />
+    <Compile Include="Interfaces\IModelConfigurationManager.cs" />
+    <Compile Include="Interfaces\IModelDataManger.cs" />
+    <Compile Include="Interfaces\IObjectDataManager.cs" />
+    <Compile Include="Interfaces\IPrimaryKeyAttribute.cs" />
+    <Compile Include="Interfaces\IDataManager.cs" />
+    <Compile Include="Interfaces\ITableNameAttribute.cs" />
+    <Compile Include="Logging\LoggingEventArgs.cs" />
+    <Compile Include="Logging\LoggingService.cs" />
+    <Compile Include="Orm\Lookupconfiguration.cs" />
+    <Compile Include="Orm\ModelBase.cs" />
+    <Compile Include="Orm\ModelCommandExecutedEventArgs.cs" />
+    <Compile Include="Orm\ModelCommandPropertyChangedEventArgs.cs" />
+    <Compile Include="Orm\ModelCommandValidationEventArgs.cs" />
+    <Compile Include="Orm\ModelConfiguration.cs" />
+    <Compile Include="Orm\ModelCommandResult.cs" />
+    <Compile Include="Orm\ModelValidation.cs" />
+    <Compile Include="Orm\PrimaryKeyAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegularExpression.cs" />
-    <Compile Include="ResultColumnAttribute.cs" />
-    <Compile Include="ResultList.cs" />
-    <Compile Include="KeyMap.cs" />
-    <Compile Include="KeyMapType.cs" />
-    <Compile Include="TableMap.cs" />
-    <Compile Include="TableDataResult.cs" />
-    <Compile Include="TableInfo.cs" />
-    <Compile Include="TableConfigurationAttribute.cs" />
-    <Compile Include="ValueConvert.cs" />
+    <Compile Include="Orm\RegularExpression.cs" />
+    <Compile Include="Orm\ResultColumnAttribute.cs" />
+    <Compile Include="Services\ResultList.cs" />
+    <Compile Include="Orm\KeyMap.cs" />
+    <Compile Include="Orm\KeyMapType.cs" />
+    <Compile Include="Orm\TableMap.cs" />
+    <Compile Include="Orm\TableDataResult.cs" />
+    <Compile Include="Orm\TableInfo.cs" />
+    <Compile Include="Orm\TableConfigurationAttribute.cs" />
+    <Compile Include="Services\ValueConvert.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

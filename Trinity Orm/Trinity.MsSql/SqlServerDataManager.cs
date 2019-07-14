@@ -12,7 +12,7 @@ using FastMember;
 
 namespace Trinity.MsSql
 {
-    public class SqlServerDataManager<T> : BaseDataManager<SqlModelCommand<T>>, IModelCommand<T>
+    public class SqlServerDataManager<T> : DataManagerBase<SqlModelCommand<T>>, IModelCommand<T>
         where T : class
     {
         public ModelConfiguration<T> ModelConfiguration { get; set; }
@@ -25,14 +25,14 @@ namespace Trinity.MsSql
         public SqlServerDataManager(string connectionString, string providerName)
             : base(connectionString, providerName)
         {
-            if (BaseDataContext.TableMaps == null)
+            if (DataContextBase.TableMaps == null)
             {
                 this.TableMaps = new Dictionary<string, TableMap>();
-                BaseDataContext.TableMaps = this.TableMaps;
+                DataContextBase.TableMaps = this.TableMaps;
             }
             else
             {
-                this.TableMaps = BaseDataContext.TableMaps;
+                this.TableMaps = DataContextBase.TableMaps;
             }
             TableMapFromDatabase = true;
         }

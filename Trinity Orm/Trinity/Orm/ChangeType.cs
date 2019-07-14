@@ -5,6 +5,6 @@ namespace Trinity
         Adding,
         Removing,
         Replacing,
-        BeforeCleard
+        BeforeClear
     };
 }

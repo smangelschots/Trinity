@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Trinity.MySql
 {
 
-    public class MySqlDataManager<T> : BaseDataManager<MySqlModelCommand<T>>, IModelCommand<T>
+    public class MySqlDataManager<T> : DataManagerBase<MySqlModelCommand<T>>, IModelCommand<T>
         where T : class
     {
 
@@ -24,14 +24,14 @@ namespace Trinity.MySql
         public MySqlDataManager(string connectionString, string providerName)
             : base(connectionString, providerName)
         {
-            if (BaseDataContext.TableMaps == null)
+            if (DataContextBase.TableMaps == null)
             {
                 this.TableMaps = new Dictionary<string, TableMap>();
-                BaseDataContext.TableMaps = this.TableMaps;
+                DataContextBase.TableMaps = this.TableMaps;
             }
             else
             {
-                this.TableMaps = BaseDataContext.TableMaps;
+                this.TableMaps = DataContextBase.TableMaps;
             }
             //this.TableMaps = new Dictionary<string, TableMap>();
             this.TableMapFromDatabase = true;

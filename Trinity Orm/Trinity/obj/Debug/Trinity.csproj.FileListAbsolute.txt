@@ -10,3 +10,9 @@ C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csprojAssemblyR
 C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csproj.CoreCompileInputs.cache
 C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.dll
 C:\Projects\Github\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity\bin\Debug\Trinity.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity\bin\Debug\Trinity.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csproj.CoreCompileInputs.cache
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.dll
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.pdb
+C:\VS\GitHub\Trinity\Trinity Orm\Trinity\obj\Debug\Trinity.csprojAssemblyReference.cache

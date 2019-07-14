@@ -65,19 +65,57 @@ namespace Trinity.Test
     public class SqlUnitTest
     {
 
-        private static string username = "bouwnetadmin";
-        private static string password = "Service01";
+
 
 
         private string _connectionstring =
-            string.Format("Data Source=localhost;Initial Catalog=TrinityTest;User Id={0};Password={1}", username,
-                password);
+            "Server=localhost;Database=Trinity;Trusted_Connection=yes; Application Name=Trinity;";
+
+
+
+        public void GetTableMap()
+        {
+
+
+
+        }
+
+
+
+
+        [TestMethod]
+        public void CreateUpdateModelTest()
+        {
+
+            var context = new SqlServerDataContext();
+
+            context.CreateTableMap("Country",new TableMap()
+            {
+                TableName = "Country",
+                Catalog = ""
+            });
+
+
+
+
+
+
+
+
+        }
+
+
+
 
 
 
         [TestMethod]
         public void InsertTestMethod()
         {
+
+            SqlServerDataContext.CreateContext();
+
+
             var db =
                 new SqlServerDataManager<Country>(
                     _connectionstring);
@@ -98,6 +136,8 @@ namespace Trinity.Test
 
             Assert.IsFalse(result.HasErrors);
         }
+
+
 
 
         [TestMethod]
