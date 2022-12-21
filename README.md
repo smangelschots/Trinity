@@ -1,4 +1,4 @@
-# Trinity ORM
+# Trinity Querybuilder
 
 Trinity is a flexible data access tool.
 
