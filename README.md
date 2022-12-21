@@ -17,7 +17,7 @@ Still under alpha testing
 
 ## Features
 
-- The ORM can handle SQL server, OleDb (access) and MySql...
+- The Querybuilder can handle SQL server, OleDb (access) and MySql...
 - Convention over configuration
 - Fluent api Linq
 - Db like statements
